@@ -28,7 +28,7 @@
 ##  -Ability to Enabled/Disable Custom Spawn lodaouts. Add the command line -CustomLoadGear to the server .exe on startup to enable
 #####  This feature allows the fresh spawn players to load in with preset randomized gear. To Configure the type of items to spawn on your players check the folder "mpmissions/DayZSurvival.chernarusplus/ScriptedMods/LoadOuts" Each Catagory is in a seperate .txt file If you wish to remove an item or add, make sure you follow the same layout as the file comes in. The Script will randomly select an item from each catagory. If you wish to remove a certain catagory simply leave the file empty or delete it. You can modify the lodaouts while the server is running! After you make your edits login as admin in game and use the Admin command /updateLoadouts
 
-## -Ability to Enabled/Disable Weapons on spawn. add command line -SpawnArmed  to the server .exe on startup to enable
+## -Ability to Enable/Disable Weapons on spawn. add command line -SpawnArmed  to the server .exe on startup to enable
 ##### This feature allows you to give fresh spawns a gun on startup To edit the types of guns it spawns, go into the following file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/DayZSurvival.c " LINE 352 That function is a randomizer. This might be helpful --> SpawnGunIn( PlayerBase player, string ClassName, bool isPrimary, TstringArray Attachments, TstringArray Extras) NOTE:  Set bool isPrimary to 'true' if you wish to make the weapon a primary
 
 
