@@ -207,8 +207,8 @@ Random preset messages popup for all players
 To change the messages check the file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/MOTDMessages.c "
 
 Usage:
-This feature is implemented within the mod.
 =
+This feature is implemented within the mod.
 
 =================================
 =
