@@ -1,4 +1,5 @@
 DayZ Survival Mission by DaOne v0.1
+Vanilla++
 
 CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system
 https://github.com/zalexki
