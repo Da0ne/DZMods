@@ -26,6 +26,25 @@ class DayZSurvival : MissionServer
 	bool m_StaminaStatus;
 	bool m_SafeZone;
 	bool m_CustomBuildings;
+	float m_LogInTimerLength;
+
+	override void OnPreloadEvent(PlayerIdentity identity, out bool useDB, out vector pos, out float yaw, out int queueTime)
+	{
+		if (GetHive())
+		{
+			// Preload data on client by character from database
+			useDB = true;
+			queueTime = m_LogInTimerLength;
+		}
+		else
+		{
+			// Preload data on client without database
+			useDB = false;
+			pos = "1189.3 0.0 5392.48";
+			yaw = 0;
+			queueTime = 5;
+		}
+	}
 
 	override void TickScheduler(float timeslice)
 	{
@@ -125,42 +144,7 @@ class DayZSurvival : MissionServer
 		if (ce)
 		ce.InitOffline();
 		//---------------
-		string cmdLine;
-		if (GetGame().CommandlineGetParam("VanillaSpawnLD", cmdLine))
-		{
-			m_VanillaLoadouts = true;
-		} else {
-			m_VanillaLoadouts = false;
-		}
-
-		if (GetGame().CommandlineGetParam("SpawnArmed", cmdLine))
-		{
-			m_SpawnArmed = true;
-		} else {
-			m_SpawnArmed = false;
-		}
-
-		if (GetGame().CommandlineGetParam("DisableStamina",cmdLine))
-		{
-			m_StaminaStatus = true;
-		} else {
-			m_StaminaStatus = false;
-		}
-
-		if (GetGame().CommandlineGetParam("SafeZone",cmdLine))
-		{
-			m_SafeZone = true;
-		} else {
-			m_SafeZone = false;
-		}
-
-		if (GetGame().CommandlineGetParam("CustomBuildings",cmdLine))
-		{
-			m_CustomBuildings = true;
-		} else {
-			m_CustomBuildings = false;
-		}
-
+		#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ModSettings.c" //Read mod settings
 		//-----Add Admins from txt-----
 		FileHandle AdminUIDSFile = OpenFile(m_AdminListPath + "Admins.txt", FileMode.READ);
 		if (AdminUIDSFile != 0)
