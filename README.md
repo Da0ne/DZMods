@@ -2,8 +2,9 @@
 #### CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
 #### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
-#### Update #1 24/11/2018 ==> Fixed a crashing issue with the score system file read function.
-####                      ==> Suicide Message are now turned off by default to enable use command line -SuicideMessage to enable/show
+##### 24/11/2018
+#### Update #1 ==> Fixed a crashing issue with the score system file read function.
+#### Update #1 ==> Suicide Message are now turned off by default to enable use command line -SuicideMessage to enable/show
 
 ## How to Setup
 
