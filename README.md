@@ -3,6 +3,8 @@
 #### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
 ##### 24/11/2018
+#### Added  `ModSettings.c` to configure mods rather than using command lines.
+#### Removed Command lines as switches to toggle mods.
 #### Update #1 ==> Fixed a crashing issue with the score system file read function.
 #### Update #1 ==> Suicide Message are now turned off by default to enable use command line -SuicideMessage to enable/show
 ----------------------------------------------------------------------------------------------------------------------
@@ -26,21 +28,21 @@
 
 # ----Features----
 
-## -Enable/Disable player Join/leave messages. Add this command line to enable: -SessionFeed
+## -Enable/Disable player Join/leave messages. Check the file "Settings.C"
 
-##  -Ability to Enabled/Disable Custom Spawn lodaouts. Add the command line -CustomLoadGear to the server .exe on startup to enable
+##  -Ability to Enabled/Disable Custom Spawn lodaouts.
 #####  This feature allows the fresh spawn players to load in with preset randomized gear. To Configure the type of items to spawn on your players check the folder "mpmissions/DayZSurvival.chernarusplus/ScriptedMods/LoadOuts" Each Catagory is in a seperate .txt file If you wish to remove an item or add, make sure you follow the same layout as the file comes in. The Script will randomly select an item from each catagory. If you wish to remove a certain catagory simply leave the file empty or delete it. You can modify the lodaouts while the server is running! After you make your edits login as admin in game and use the Admin command /updateLoadouts
 
-## -Ability to Enable/Disable Weapons on spawn. add command line -SpawnArmed  to the server .exe on startup to enable
+## -Ability to Enable/Disable Weapons on spawn.
 ##### This feature allows you to give fresh spawns a gun on startup To edit the types of guns it spawns, go into the following file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/DayZSurvival.c " LINE 352 That function is a randomizer. This might be helpful --> SpawnGunIn( PlayerBase player, string ClassName, bool isPrimary, TstringArray Attachments, TstringArray Extras) NOTE:  Set bool isPrimary to 'true' if you wish to make the weapon a primary
 
 
 ## - Disable/Enable stamina Add this command line -DisableStamina  to disable it on server startup.
 
-## - Custom SafeZone with gmode. Add -SafeZone as a command line to the server .exe
+## - Custom SafeZone with gmode.
 ##### This feature allows you to place a safezone anywhere on the map with a radius you wish for. To modifiy the safeZone area check this file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/SafeZoneFunctions "
 
-## - Spawn Custom Buildings anywhere on the map. add the command line -CustomBuildings to enable
+## - Spawn Custom Buildings anywhere on the map
 ##### This feature is just an easy way to place your CustomBuildings code in a tidy spot and not in the main init where shit gets clustred. Check the file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/BuildingSpawner.c" it does not matter how you spawn your buildings or set thier direction oritention etc, just make sure the script is inside the Void() to get executed on server startup A nice way to get buildings imported is to use the COM (Community Offline Mode from Arkensor). You can place buidlings and extract thier info. Thank @DannyDog for that feature
 
 ## - Chat Based Admin Tool set.  Simply Add your steam 64 ID into the file mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Admins.txt" Set a server admin password in the server.cfg, in game login using the password. #login myPassword The Admintoolset feature can be found here: https://pastebin.com/U4FiYhSf
