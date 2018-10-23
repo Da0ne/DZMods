@@ -5,7 +5,7 @@
 ##### 24/11/2018
 #### Update #1 ==> Fixed a crashing issue with the score system file read function.
 #### Update #1 ==> Suicide Message are now turned off by default to enable use command line -SuicideMessage to enable/show
-
+----------------------------------------------------------------------------------------------------------------------
 ## How to Setup
 
 ### Step One:
