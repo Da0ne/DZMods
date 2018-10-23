@@ -48,12 +48,12 @@
 ![](https://i.gyazo.com/a1b0b333ba1f7b273c7b7cf3d66de66b.png)
 #### Make sure the path is correct according to where mission is.
 
-#### - Create a new text file in your mission folder (default: dayzOffline.chernarusplus). Name it: `Admins.txt`Open it and add the steam 64 ID's of your admins. You can obtain the 64 ID using: steamid.io
+#### - Create a new text file in your mission folder (default: dayzOffline.chernarusplus). Name it: `Admins.txt`Open it and add the steam 64 ID's of your admins. You can obtain the 64 ID using: [Steam IO](steamid.io)
 
 #### Should look like this:
 
 ![](https://i.gyazo.com/88f1d7acc7d135279e15400c3e46bb2f.png)
 
 #### Save and exit. Run the server and in game login as admin using the #login Password command.
-#### Here is a list of the commands you can use: pastebin.com/Xe1Rmwp5
+#### Here is a list of the commands you can use: [Commands List](pastebin.com/Xe1Rmwp5)
 #### (The godmode feature is currently not implemented, will be added in future updates)
