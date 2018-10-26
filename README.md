@@ -13,7 +13,7 @@
 ### IMPORTANT : For those who own a server provide by [www.Vilayer.com](Vilayer.com), can auto install the mod via the `AddonManager` (special thanks goes to the Vilayer team)!
 ![](https://ci5.googleusercontent.com/proxy/yE1RaRsPdehe3Y5lTBg3K2UmKkKYBPUl4HOLneY8hzalp34EayGB0c8qeUxsz4W_vaGETV57DzOYC1huj7bvJmDlyfIodhIE2p07uyLeVuvkyCvCOmKg=s0-d-e1-ft#https://www.vilayer.com/templates/ColoNode/html/img/logo_dark.png)
 ### Step One:
-##### Go to your server directory and create a folder, name the folder whatever you want
+##### Go to your server directory and create a folder, name the folder what ever you desire son. (just give it a damn name that is not NewFolder)
 
 ### Step Two:
 ##### open the folder 'mpmissions' in your server directory, copy the file 'DayZSurvival.chernarusplus' and place it in there. (If you had any edits done to your loot xmls and wish to keep the storage make sure you replace it with the ones that are in 'DayZSurvival.chernarusplus' ) The db folder contains NO MODDED features/changes its all vanilla same goes with other xmls. Replace it with your modded xmls if you wish to.
