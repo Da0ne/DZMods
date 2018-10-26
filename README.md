@@ -57,3 +57,6 @@
 
 ## - Custom MOTD based within the mission
 ##### Random preset messages popup for all players. To change the messages check the file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/MOTDMessages.c "
+
+### USEFUL THINGS:
+#### How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
