@@ -1,12 +1,14 @@
-//keep the goddamn init clean you FUCKS!
+//Keep the goddamn init clean please!
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\DayZSurvival.c"
+#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\InfectedHordes.c"
+
 Mission CreateCustomMission(string path)
 {
 	return new DayZSurvival();
 }
 
 void main()
-{
+{	
 	Weather weather = g_Game.GetWeather();
 
 	weather.GetOvercast().SetLimits( 0.0 , 1.0 );

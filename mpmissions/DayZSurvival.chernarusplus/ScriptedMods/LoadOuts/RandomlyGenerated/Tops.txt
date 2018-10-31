@@ -1,0 +1,6 @@
+policejacket
+policejacketorel
+firefighterjacket_beige
+firefighterjacket_black
+huntingjacket_brown
+huntingjacket_spring

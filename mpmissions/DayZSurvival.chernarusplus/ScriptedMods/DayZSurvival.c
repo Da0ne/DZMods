@@ -1,15 +1,18 @@
 class DayZSurvival : MissionServer
 {
+	bool m_Debugmode;
+
 	// Called within class as extentions NOT class mainscope DO NOT DEFINE CLASS IN FILE! 
 	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\BuildingSpawner.c"
-	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\MOTDMessages.c" //Custom MOTD fucns
-	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\SafeZoneFunctions.c" //Safe zone script
-	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\AdminTool\\AdminTool.c" //Adds other voids to class (so this .c file stays a little more clean)
+	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\MOTDMessages.c"
+	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\SafeZoneFunctions.c"
+	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\AdminTool\\AdminTool.c"
+	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\ExportFunctions.c"
+	#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\LoadStaticLDFunctions.c"
 
-	string SelectedPos;
-	string m_LoadoutsPath = "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\LoadOuts\\";
-	string m_AdminListPath = "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\";
+	ref InfectedHordes ZmbEvents;
 
+	//This is for the randomly generated loadouts
 	ref TStringArray LoadoutCatagories = {"Bags","Gloves","Vests","Tops","Pants","Boots","HeadGear"}; //Add any new catagories here, make sure the name matches everywhere used including file
 
 	ref TStringArray Bags = {};
@@ -21,11 +24,25 @@ class DayZSurvival : MissionServer
 	ref TStringArray HeadGear = {};
 
 	ref map<string,string>	PoweredOptics = new map<string,string>; //Type of optics, type of battery
-	bool m_VanillaLoadouts;
+
+	/*Dont touch*/
+	//---------------
+	bool m_StaticLoadouts;
+	bool m_RandomizedLoadouts;
+	bool m_CustomLoadouts;
+
+	string m_RandomLoadoutsPath;
+	string m_AdminListPath;
+
+	//---------------
 	bool m_SpawnArmed;
 	bool m_StaminaStatus;
 	bool m_SafeZone;
 	bool m_CustomBuildings;
+	bool m_SessionFeed;
+	bool m_ZedHordes;
+	bool m_ProxyExportMode;
+
 	float m_LogInTimerLength;
 
 	override void OnPreloadEvent(PlayerIdentity identity, out bool useDB, out vector pos, out float yaw, out int queueTime)
@@ -40,9 +57,9 @@ class DayZSurvival : MissionServer
 		{
 			// Preload data on client without database
 			useDB = false;
-			pos = "1189.3 0.0 5392.48";
+			pos = "7500 0 7500";
 			yaw = 0;
-			queueTime = 5;
+			queueTime = m_LogInTimerLength;
 		}
 	}
 
@@ -78,27 +95,32 @@ class DayZSurvival : MissionServer
 
 	void ConstructLoadouts(bool update)
 	{
+		FileHandle currentFile;
+		string line_content = "";
+
 		if (update) {
-			Bags.Clear();
-			Gloves.Clear();
-			Vests.Clear();
-			Tops.Clear();
-			Pants.Clear();
-			Boots.Clear();
-			HeadGear.Clear();
+			if (m_RandomizedLoadouts)
+			{
+				Bags.Clear();
+				Gloves.Clear();
+				Vests.Clear();
+				Tops.Clear();
+				Pants.Clear();
+				Boots.Clear();
+				HeadGear.Clear();
+			}
 		}
 
-		for ( int i = 0; i < LoadoutCatagories.Count(); ++i )
+		if (m_RandomizedLoadouts)
 		{
-			string currentCatagory = LoadoutCatagories.Get(i);
-			string checkEmpty;
-			FileHandle currentFile = OpenFile(m_LoadoutsPath + currentCatagory + ".txt", FileMode.READ);
-			if (currentFile != 0)
+			//Load randomized ld items
+			for ( int i = 0; i < LoadoutCatagories.Count(); ++i )
 			{
-				FGets(currentFile,checkEmpty);
-				if (checkEmpty != "")
+				string currentCatagory = LoadoutCatagories.Get(i);
+				currentFile = OpenFile(m_RandomLoadoutsPath + currentCatagory + ".txt", FileMode.READ);
+				if (currentFile != 0)
 				{
-					string line_content = "";
+					line_content = "";
 					while ( FGets(currentFile,line_content) > 0 )
 					{
 						switch(currentCatagory)
@@ -132,19 +154,31 @@ class DayZSurvival : MissionServer
 							break;
 						}
 					}
-				}
-				CloseFile(currentFile);
-		    }
+					CloseFile(currentFile);
+			    }
+			}
 		}
 	}
 
 	override void OnInit()
 	{
-		Hive ce = CreateHive();
-		if (ce)
-		ce.InitOffline();
 		//---------------
 		#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ModSettings.c" //Read mod settings
+
+		if (!m_Debugmode)
+		{
+			Hive ce = CreateHive();
+			if (ce)
+			ce.InitOffline();
+		}
+
+		if (m_ProxyExportMode)
+		{
+			CETesting TestHive = GetTesting();
+			TestHive.ExportProxyProto();
+			TestHive.ExportProxyData( "7500 0 7500", 15000 );
+		}
+
 		//-----Add Admins from txt-----
 		FileHandle AdminUIDSFile = OpenFile(m_AdminListPath + "Admins.txt", FileMode.READ);
 		if (AdminUIDSFile != 0)
@@ -163,11 +197,12 @@ class DayZSurvival : MissionServer
 		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.CustomMOTD, TIME_INTERVAL, true);  //Default 120000 2 mins Looped
 		//----------------------------------
 		AdminTool(); //Call for admin tool scripts
+		if (m_SessionFeed) { g_Game.SetProfileString("SessionFeed", "true"); } else { g_Game.SetProfileString("SessionFeed", "false"); }
 		if (m_CustomBuildings) { BuildingSpawner(); } //Spawn for custom buildings
+		if (m_ZedHordes) { ZmbEvents = new InfectedHordes(); }
 		ConstructLoadouts(false); //Read and construct loadouts Array from files.
 		//----------------------------------
 
-		//-----------------------------
 		PoweredOptics.Insert("m4_carryhandleoptic","");
 		PoweredOptics.Insert("buisoptic","");
 		PoweredOptics.Insert("M68Optic","Battery9V");
@@ -203,58 +238,56 @@ class DayZSurvival : MissionServer
 	    GlobalMessage(1,"Online Players: "+ numbOfplayers.ToString());
 	}
 	
-	void SpawnGunIn(PlayerBase player, string item = "", bool isMainGun = true, TStringArray attachments = NULL, TStringArray Extras = NULL)
+	void SpawnGunIn(PlayerBase player, string item, bool isMainGun, array<string> attachments, array<string> Extras)
 	{
-		ItemBase itemAI;
+		EntityAI itemAI;
 
 		EntityAI myAttachmentAI;
-		ItemBase myAttachmentIB;
+		EntityAI myAttachmentIB;
 
 		EntityAI ExtraEntity;
-		ItemBase magEntity;
+
+		int MinQuantity;
+		Magazine mag;
 
 		if (isMainGun)
 		{
-			if ( item != "" ) 
+			itemAI = player.GetHumanInventory().CreateInHands( item );
+
+			player.SetQuickBarEntityShortcut(itemAI, 2, true); //Puts gun on hotkey 3
+
+			if ( attachments != NULL )
 			{
-				itemAI = player.GetHumanInventory().CreateInHands( item );
-				Weapon_Base wpn = Weapon_Base.Cast(itemAI);
-
-				player.SetQuickBarEntityShortcut(itemAI, 2, true); //Puts gun on hotkey 3
-
-				if ( attachments != NULL && attachments.Count() > 0 )
-				{
 					
-					for (int i = 0; i < attachments.Count(); ++i)
-					{
-						myAttachmentAI = itemAI.GetInventory().CreateInInventory( attachments.Get(i) );
-
-						if (PoweredOptics.Contains(attachments.Get(i)))
-						{
-							myAttachmentAI.GetInventory().CreateInInventory( "Battery9V" );
-						}
-					}
-				}
-				
-				if ( Extras != NULL && Extras.Count() > 0 )
+				for (int i = 0; i < attachments.Count(); ++i)
 				{
-					for (int ii = 0; ii < Extras.Count(); ++ii)
+					myAttachmentAI = itemAI.GetInventory().CreateInInventory( attachments.Get(i) );
+					if (PoweredOptics.Contains(attachments.Get(i)))
 					{
-						if (GetGame().IsKindOf( Extras.Get(ii), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ii), "Ammunition_Base")) )
-						{
-							magEntity = player.GetHumanInventory().CreateInInventory(Extras.Get(ii));
-							Magazine mag = Magazine.Cast(magEntity);
-							player.GetWeaponManager().AttachMagazine(mag);
-							ExtraEntity = player.GetInventory().CreateInInventory( Extras.Get(ii) );
-							player.SetQuickBarEntityShortcut(ExtraEntity, 0, true);  //Puts main weapons mag on hotkey 1
-						}
-						else
-						{
-							ExtraEntity = player.GetInventory().CreateInInventory( Extras.Get(ii) );
-						}
+						myAttachmentAI.GetInventory().CreateInInventory( "Battery9V" );
 					}
 				}
-			
+			}
+				
+			if ( Extras != NULL )
+			{
+				for (int ii = 0; ii < Extras.Count(); ++ii)
+				{
+					if (GetGame().IsKindOf( Extras.Get(ii), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ii), "Ammunition_Base")) )
+					{
+						mag = player.GetHumanInventory().CreateInInventory(Extras.Get(ii));
+						MinQuantity = 2;
+						if (mag)
+						{
+							mag.ServerSetAmmoCount(Math.RandomIntInclusive(MinQuantity,mag.GetAmmoMax()));
+							player.SetQuickBarEntityShortcut(mag, 0, true);  //Puts main weapons mag on hotkey 1
+						}
+					}
+					else
+					{
+						ExtraEntity = player.GetInventory().CreateInInventory( Extras.Get(ii) );
+					}
+				}
 			}
 		}
 		else
@@ -268,9 +301,6 @@ class DayZSurvival : MissionServer
 			
 				if ( attachments != NULL && attachments.Count() > 0 )
 				{
-					myAttachmentAI;
-					myAttachmentIB;
-					
 					for (int iz = 0; iz < attachments.Count(); ++iz)
 					{
 						myAttachmentIB = itemAI.GetInventory().CreateAttachment( attachments.Get(iz) );
@@ -287,8 +317,11 @@ class DayZSurvival : MissionServer
 					{
 						if (GetGame().IsKindOf( Extras.Get(ip), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ip), "Ammunition_Base")) )
 						{
-							ExtraEntity = player.GetInventory().CreateInInventory( Extras.Get(ip) );
-							player.SetQuickBarEntityShortcut(ExtraEntity, 1, true);   //Puts the mag for the secondary on hotkey 2
+							mag = player.GetInventory().CreateInInventory( Extras.Get(ip) );
+							player.SetQuickBarEntityShortcut(mag, 1, true);   //Puts the mag for the secondary on hotkey 2
+
+							MinQuantity = 2;
+							mag.ServerSetAmmoCount(Math.RandomIntInclusive(MinQuantity,mag.GetAmmoMax()));
 						}
 						else
 						{
@@ -300,67 +333,74 @@ class DayZSurvival : MissionServer
 			}
 		}
 		
-	} 
+	}
 
 	override void StartingEquipSetup(PlayerBase player, bool clothesChosen)
 	{
-		EntityAI EntityRifle;
-		ItemBase itemRifle;
-			
-		EntityAI EntityPistol;
-		ItemBase itemPistol;
-
 		ItemBase itemBs;
 		EntityAI itemEnt;
 		
-		if (m_VanillaLoadouts)
+		if (m_CustomLoadouts)
 		{
+			if (m_StaticLoadouts)
+			{
+				bool reqld = LoadRandomStaticLD(player);
+			}
+			else if (m_RandomizedLoadouts)
+			{
+				player.RemoveAllItems();
+
+				if (Bags.Count() > 0) { player.GetInventory().CreateInInventory( Bags.GetRandomElement() );  }
+				if (Gloves.Count() > 0) { player.GetInventory().CreateInInventory( Gloves.GetRandomElement() ); }
+				if (Vests.Count() > 0) { player.GetInventory().CreateInInventory( Vests.GetRandomElement() ); }
+				if (Tops.Count() > 0) { player.GetInventory().CreateInInventory( Tops.GetRandomElement() ); }
+				if (Pants.Count() > 0) { player.GetInventory().CreateInInventory( Pants.GetRandomElement() ); }
+				if (Boots.Count() > 0) { player.GetInventory().CreateInInventory( Boots.GetRandomElement() ); }
+				if (HeadGear.Count() > 0) { player.GetInventory().CreateInInventory( HeadGear.GetRandomElement() ); }
+
+				player.GetInventory().CreateInInventory( "Battery9V" );
+				
+				itemEnt = player.GetInventory().CreateInInventory( "Rag" );
+				itemBs = ItemBase.Cast(itemEnt);
+				itemBs.SetQuantity(6);
+
+				player.SetQuickBarEntityShortcut(itemBs, 0, true);
+			}
+			else
+			{
+				//Vanilla
+				itemEnt = player.GetInventory().CreateInInventory( "Rag" );
+				itemBs = ItemBase.Cast(itemEnt);							
+				itemBs.SetQuantity(6);
+			}
+		}
+		else
+		{
+			//Vanilla
 			itemEnt = player.GetInventory().CreateInInventory( "Rag" );
 			itemBs = ItemBase.Cast(itemEnt);							
 			itemBs.SetQuantity(6);
 		}
-		else
+			
+		if (m_SpawnArmed)
 		{
-			player.RemoveAllItems();
-			//Edit loadouts Via the LOADOUTS folder in ScriptedMods folder!
-			//If you wish for an item from a specific catagory to not be spawned just hash out this part:: player.GetInventory().CreateInInventory( Bags.GetRandomElement() );
-			
-			if (Bags.Count() > 0) { player.GetInventory().CreateInInventory( Bags.GetRandomElement() );  }
-			if (Gloves.Count() > 0) { player.GetInventory().CreateInInventory( Gloves.GetRandomElement() ); }
-			if (Vests.Count() > 0) { player.GetInventory().CreateInInventory( Vests.GetRandomElement() ); }
-			if (Tops.Count() > 0) { player.GetInventory().CreateInInventory( Tops.GetRandomElement() ); }
-			if (Pants.Count() > 0) { player.GetInventory().CreateInInventory( Pants.GetRandomElement() ); }
-			if (Boots.Count() > 0) { player.GetInventory().CreateInInventory( Boots.GetRandomElement() ); }
-			if (HeadGear.Count() > 0) { player.GetInventory().CreateInInventory( HeadGear.GetRandomElement() ); }
+		    //Gun spawner Handle
+			//SpawnGunIn( PlayerBase player, string ClassName, bool isPrimary, TstringArray Attachments, TstringArray Extras) NOTE: Set bool to 'true' IF weapon was primary
+			int oRandValue = Math.RandomIntInclusive(0,2);
+			switch(oRandValue.ToString())
+			{
+				case "0":
+				SpawnGunIn( player , "fnx45", true, {"fnp45_mrdsoptic","PistolSuppressor"},{"mag_fnx45_15rnd","mag_fnx45_15rnd"} );
+				break;
 
-			player.GetInventory().CreateInInventory( "Battery9V" );
-			
-			itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-			itemBs = ItemBase.Cast(itemEnt);							
-			itemBs.SetQuantity(6);
+				case "1":
+				SpawnGunIn( player , "CZ75", true, {"PistolSuppressor"} , {"Mag_CZ75_15Rnd","Mag_CZ75_15Rnd"} );
+				break;
 
-			player.SetQuickBarEntityShortcut(itemBs, 0, true);
-		   }
-			
-		  if (m_SpawnArmed)
-		  {
-				//Gun spawner Handle
-			    //SpawnGunIn( PlayerBase player, string ClassName, bool isPrimary, TstringArray Attachments, TstringArray Extras) NOTE: Set bool to 'true' IF weapon was primary
-				int oRandValue = Math.RandomIntInclusive(0,2);
-				switch(oRandValue.ToString())
-				{
-					case "0":
-					SpawnGunIn( player , "fnx45", true, {"fnp45_mrdsoptic","PistolSuppressor"},{"mag_fnx45_15rnd","mag_fnx45_15rnd","ammo_45acp","ammo_45acp"} );
-					break;
-
-					case "1":
-					SpawnGunIn( player , "CZ75", true, {"PistolSuppressor"} , {"Mag_CZ75_15Rnd","Mag_CZ75_15Rnd","ammo_9x19","ammo_9x19"} );
-					break;
-
-					case "2":
-					SpawnGunIn( player , "makarovij70", true, {"PistolSuppressor"} , {"mag_ij70_8rnd","mag_ij70_8rnd","ammo_380","ammo_380"} );
-					break;
-				}
-		  }
+				case "2":
+				SpawnGunIn( player , "makarovij70", true, {"PistolSuppressor"} , {"mag_ij70_8rnd","mag_ij70_8rnd"} );
+				break;
+			}
+		}
 	}
 };
