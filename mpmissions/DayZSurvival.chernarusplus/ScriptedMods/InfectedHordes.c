@@ -7,7 +7,7 @@ class InfectedHordes
 
 	int CURRENT_STAMP;
 	int CURRENT_STAMP_MSG;
-	int MESSAGE_INTERVAL     = 5000;   //in ms time between each message 300000
+	int MESSAGE_INTERVAL     = 300000;   //in ms time between each message 300000
 	int COOL_DOWN_INTERVAL   = 1800000;  //In ms the time between each event
 	int UPDATE_INTERVAL      = 5000;   //In ms the time between each update ( don't change unless you know what you are doing :) )
 	int INT_MAX_ZOMBIES      = 125;     //Maximum amount of zombies
