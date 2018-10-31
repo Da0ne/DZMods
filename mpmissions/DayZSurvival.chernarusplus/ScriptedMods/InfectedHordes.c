@@ -139,7 +139,7 @@ class InfectedHordes
 	{
 		float newStamp = GetGame().GetTime();
 		string message;
-		if (newStamp - CURRENT_STAMP >= UPDATE_INTERVAL)
+		if (newStamp - CURRENT_STAMP >= COOL_DOWN_INTERVAL)
 		{
 			//Select new area
 			if (m_EventOnGoing)
