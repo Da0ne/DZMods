@@ -1,5 +1,5 @@
 
-# DayZ Vanilla++ Mission by DaOne v0.1
+# DayZ Vanilla++ Mission by DaOne v0.2
 #### CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
 #### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
