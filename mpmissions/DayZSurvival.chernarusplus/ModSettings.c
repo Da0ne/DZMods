@@ -12,7 +12,7 @@ m_ProxyExportMode     = false; //Set to ture to export a new loot positions xml 
 m_LogInTimerLength    = 1;     //in seconds the spawn timer when players login!
 
 
-m_Debugmode   		  = true; //Set true to disable db for faster server loading and for testing purposes
+m_Debugmode   		  = false; //Set true to disable db for faster server loading and for testing purposes
 
 /*Paths:: !!JUST DONT MESS AROUND WITH THESE UNLESS YOU KNOW WHAT YOU ARE DOING!!*/
 m_RandomLoadoutsPath = "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\LoadOuts\\RandomlyGenerated\\";
