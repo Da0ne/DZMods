@@ -3,11 +3,30 @@
 #### CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
 #### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
-##### 24/11/2018
-#### Added  `ModSettings.c` to configure mods rather than using command lines.
-#### Removed Command lines as switches to toggle mods.
-#### Update #1 ==> Fixed a crashing issue with the score system file read function.
-#### Update #1 ==> Suicide Message are now turned off by default to enable use command line -SuicideMessage to enable/show
+##### UPDATE  31/11/2018
+### ChangeLog:
+####  New Features/Changes to existing features:
+#### -Removed the use of command lines as keys to disable and enable mods due to complications with third party hosting services
+#### -Added 'ModSettings.c' that handles all the mod options. Enabling/Disabling features are all now manipulated via this file.
+#### -Added the ability to generate and save static loadouts.
+ >Usage: As an admin use the command /export and the gear that is currently on your player will be saved and can be utilized as a loadout-on-spawn if you enable 'm_CustomLoadouts' & 'm_StaticLoadouts' make sure to disable 'm_RandomizedLoadouts'
+ -Added Customizable Infected randomized server events. ( check InfectedHordes.c For more info )
+ -AdminTool: Added a new command  /LoadoutType used to switch from using static loadouts to randomized. Works only if custom loadouts is enabled in ModSettings.c
+  
+  
+#### BugFixes:
+-Fixed a bug with the AdminTool printing error messages in crash.log and scripts.log due to shitty code :P
+-Improved the functionailty of some loops that could have caused possible FPS drops (safezone...)
+
+#### KnownIssues:
+-New Loadout feature does not attach secondary weapon attachmnets (pistol/weapon that is placed within an inventory container).
+-SafeZone Godmode is not really godmode thats because the damage fucntions are hard-codded into the game engine.
+
+#### Future Plans & updates:
+ -Support for client side.
+	-UI for trader system, admin tool interface/panel, Customizable map UI, Killfeed UI
+ - Fully Customizable Randomized AI server events.
+ - Support of 'event mode' ( switching the server from survival to PvP style with ability to customize playzones,match duration etc )
 ----------------------------------------------------------------------------------------------------------------------
 ## How to Setup
 ### IMPORTANT : For those who own a server provide by [www.Vilayer.com](Vilayer.com), can auto install the mod via the `AddonManager` (special thanks goes to the Vilayer team)!
@@ -48,7 +67,7 @@
 ##### This feature is just an easy way to place your CustomBuildings code in a tidy spot and not in the main init where shit gets clustred. Check the file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/BuildingSpawner.c" it does not matter how you spawn your buildings or set thier direction oritention etc, just make sure the script is inside the Void() to get executed on server startup A nice way to get buildings imported is to use the COM (Community Offline Mode from Arkensor). You can place buidlings and extract thier info. Thank @DannyDog for that feature
 
 ## - Chat Based Admin Tool set.  
-#### Simply Add your steam 64 ID into the file mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Admins.txt" Set a server admin password in the server.cfg, in game login using the password. #login myPassword The Admintoolset feature can be found here: https://pastebin.com/U4FiYhSf
+#### Simply Add your steam 64 ID into the file mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Admins.txt" Set a server admin password in the server.cfg, in game login using the password. #login myPassword The Admintoolset feature can be found here: https://pastebin.com/GGrCDg3f
 
 ## - Player score tracking system and Kill Activity tracker with timestamps
 ##### This feature creates two files in the server profile ( if you use -instance command line it would be placed there ) the serevr profile is in Documents folder by deafult (its where your logs are). provides detailed kill log and records players stats such as total deaths and total kills on the server. This feature is implemented within the mod.
