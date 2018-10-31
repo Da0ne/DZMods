@@ -5,13 +5,13 @@ class InfectedHordes
 	string m_NewHordeMsg 	  = "A New Horde of Zombies Showed up Around: ";
 	string m_LastSennHordeMsg = "The Horde of Zombies Was Last Seen Around: ";
 
-	float CURRENT_STAMP;
-	float CURRENT_STAMP_MSG;
-	float MESSAGE_INTERVAL   = 120;   //in secs time between each message
-	float COOL_DOWN_INTERVAL = 1800;  //In seconds the time between each event
-	int UPDATE_INTERVAL      = 30000;//In ms the time between each update ( don't change unless you know what you are doing :) )
-	int INT_MAX_ZOMBIES      = 75;   //Maximum amount of zombies
-	int INT_MIN_ZOMBIES      = 50;   //Minimum amount of zombies
+	int CURRENT_STAMP;
+	int CURRENT_STAMP_MSG;
+	int MESSAGE_INTERVAL     = 300000;   //in ms time between each message
+	int COOL_DOWN_INTERVAL   = 1800000;  //In ms the time between each event
+	int UPDATE_INTERVAL      = 30000;   //In ms the time between each update ( don't change unless you know what you are doing :) )
+	int INT_MAX_ZOMBIES      = 125;     //Maximum amount of zombies
+	int INT_MIN_ZOMBIES      = 65;      //Minimum amount of zombies
 
 	bool m_EventOnGoing	 = false;
 
@@ -43,8 +43,6 @@ class InfectedHordes
         m_HordePositions.Insert( "Zelenogorsk North", "2741 0 5416" );
 		m_HordePositions.Insert( "Novaya Petrovka", "3395 0 13013" );
 		
-		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.onUpdate, UPDATE_INTERVAL, true);
-
 		CURRENT_STAMP = GetGame().GetTime();
 		CURRENT_STAMP_MSG = GetGame().GetTime();
 		m_SpawnedZombies.Clear();
@@ -52,11 +50,8 @@ class InfectedHordes
 		SpawnHorde();
 		string message = m_NewHordeMsg + m_CurrentZone;
 		GlobalNotifier("inform",message);
-	}
 
-	void ~InfectedHordes()
-	{
-		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(this.onUpdate); //Kill loop
+		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.onUpdate, UPDATE_INTERVAL, true);
 	}
 
 	vector SnapToGround(vector pos)
@@ -75,12 +70,13 @@ class InfectedHordes
 		m_EventOnGoing = true;
 
 		int oRandValue   = Math.RandomIntInclusive(INT_MIN_ZOMBIES,INT_MAX_ZOMBIES);
-		EntityAI AIzmb;
 
 		if (oRandValue != 0)
 		{
 			for (int i = 0; i < oRandValue; ++i)
 			{
+				EntityAI AIzmb;
+
 				int rndX = Math.RandomIntInclusive(50,350);
 				int rndY = Math.RandomIntInclusive(50,350);
 				int oSkin 		 = Math.RandomIntInclusive(0,5);
@@ -91,14 +87,20 @@ class InfectedHordes
 
 				if (oSkin == 5)
 				{
-					AIzmb.SetObjectMaterial( 0, "DZ\\data\\data\\laser.rvmat" );
-					AIzmb.SetObjectMaterial( 1, "DZ\\data\\data\\laser.rvmat" );
-					AIzmb.SetObjectMaterial( 2, "DZ\\data\\data\\laser.rvmat" );
+					if (AIzmb != NULL)
+					{
+						AIzmb.SetObjectMaterial( 0, "DZ\\data\\data\\laser.rvmat" );
+						AIzmb.SetObjectMaterial( 1, "DZ\\data\\data\\laser.rvmat" );
+						AIzmb.SetObjectMaterial( 2, "DZ\\data\\data\\laser.rvmat" );
+					}
 				}
 
 				ZombieBase Bszmb = ZombieBase.Cast(AIzmb);
 				int dropChance = Math.RandomIntInclusive(0,1);
-				Bszmb.AttachEventHandle(PossibleLootDrops,PossibleWeaponDrops,dropChance);
+				if (Bszmb != NULL)
+				{
+					Bszmb.AttachEventHandle(PossibleLootDrops,PossibleWeaponDrops,dropChance);
+				}
 				m_SpawnedZombies.Insert(AIzmb);
 			}
 		}
@@ -137,8 +139,9 @@ class InfectedHordes
 
 	void onUpdate()
 	{
-		float newStamp = GetGame().GetTime();
+		int newStamp = GetGame().GetTime();
 		string message;
+		Print("TIME:: "+(newStamp - CURRENT_STAMP));
 		if (newStamp - CURRENT_STAMP >= COOL_DOWN_INTERVAL)
 		{
 			//Select new area
@@ -150,7 +153,6 @@ class InfectedHordes
 				message = m_NewHordeMsg + m_CurrentZone;
 				GlobalNotifier("inform",message);
 			}
-
 			CURRENT_STAMP = GetGame().GetTime();
 		}
 
