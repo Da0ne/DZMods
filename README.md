@@ -3,7 +3,15 @@
 #### CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
 #### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
-##### UPDATE  31/11/2018
+##### UPDATE  8/11/2018
+### ChangeLog:
+#### Fixed Mission to work with build 0.63.149358
+#### The Mission was re-structered
+#### 'ModSettings.c' is not a thing anymore, check 'Tunables.c'
+### Issues:
+#### Custom MOTD mod is currently unfucntional, due to its terrible state.
+
+##### UPDATE  31/10/2018
 ### ChangeLog:
 ####  New Features/Changes to existing features:
 #### -Removed the use of command lines as keys to disable and enable mods due to complications with third party hosting services
