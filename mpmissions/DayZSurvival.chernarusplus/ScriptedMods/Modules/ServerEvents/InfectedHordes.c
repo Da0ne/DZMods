@@ -52,6 +52,7 @@ class InfectedHordes
 		GlobalNotifier("inform",message);
 
 		GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.onUpdate, UPDATE_INTERVAL, true);
+		Print("Infected Hordes...INIT!");
 	}
 
 	vector SnapToGround(vector pos)
