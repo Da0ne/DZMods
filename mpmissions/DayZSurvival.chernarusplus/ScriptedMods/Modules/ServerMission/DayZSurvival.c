@@ -4,12 +4,14 @@
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdvancedLoadouts\\AdvancedLoadouts.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\Misc\\BuildingSpawner.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\SafeZone\\SafeZoneFunctions.c"
+#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\ServerEvents\\InfectedHordes.c"
 
 //#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\Misc\\MOTDMessages.c"
 
 class DayZSurvival : MissionServer
 {
 	private ref set<ref ModuleManager> m_Modules;
+	ref InfectedHordes m_ZombieEvents;
 	protected float m_LogInTimerLength = 1;     //in seconds the spawn timer when players login!
 	bool m_StaminaStatus = false;
 
@@ -66,6 +68,7 @@ class DayZSurvival : MissionServer
 		return NULL;
 	}
 	
+	
 	override void OnInit()
 	{
 		super.OnInit();
@@ -103,6 +106,11 @@ class DayZSurvival : MissionServer
 		if (ModTunables.Cast(GetModule(ModTunables)).IsActiveMisc("StaminaStatus"))
 		{
 			m_StaminaStatus = true; //Disable Stamina
+		}
+		
+		if (ModTunables.Cast(GetModule(ModTunables)).IsActive("InfectedHordes"))
+		{
+			m_ZombieEvents = new InfectedHordes;
 		}
 		
 		//-----------
