@@ -24,16 +24,10 @@ class AdminTool extends ModuleManager
 		m_AdminList    = new map<string, string>; //UID, name
 		m_TPLocations  = new map<string, vector>; //name of town, pos
 		m_ExtendedCommands = new map<string,int>; //Command, length
-		
-		/*ADD YOUR STEAM 64 EXACTLY LIKE HOW ITS SHOW BELOW HERE.*/
-		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
-		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
-		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
-		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
-		
-		/*
+
+
 		//-----Add Admins from txt-----
-		FileHandle AdminUIDSFile = OpenFile(m_AdminListPath + "Admins.txt", FileMode.READ);
+		FileHandle AdminUIDSFile = OpenFile(m_AdminListPath + "Admins.txt",FileMode.READ);
 		if (AdminUIDSFile != 0)
 		{
 			string line_content = "";
@@ -44,7 +38,7 @@ class AdminTool extends ModuleManager
 			}
 			CloseFile(AdminUIDSFile);
 		}
-		*/
+		
 		//Add Towns to TP array
 		m_TPLocations.Insert( "Severograd", "8428.0 0.0 12767.1" );
 		m_TPLocations.Insert( "Krasnostav", "11172.0 0.0 12314.1" );
@@ -507,6 +501,12 @@ class AdminTool extends ModuleManager
 							MyV3S.GetInventory().CreateAttachment("SparkPlug");
 							MyV3S.GetInventory().CreateAttachment("EngineBelt");
 							MyV3S.GetInventory().CreateAttachment("CarBattery");
+							auto carfluids = Car.Cast( MyV3S );
+							carfluids.Fill( CarFluid.FUEL, 1000 );
+							carfluids.Fill( CarFluid.OIL, 1000 );
+							carfluids.Fill( CarFluid.BRAKE, 1000 );
+							carfluids.Fill( CarFluid.COOLANT, 1000 );
+							    break;
 							break;
 
 							default:
