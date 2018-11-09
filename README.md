@@ -3,6 +3,8 @@
 #### CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
 #### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
+##### FOR THE ADMIN TOOL, A TEMP HOTFIX WAS PUSHED FOR THE BETA UPDATE, 'FileHandle' was broken by the devs. YOU HAVE TO MANUALLY ADD YOUR GUID TO 'AdminTool.c' Check the file on how to do it. ALOS THE LOADOUT FUCNTIONS ARE FUCKED, cuz FILEHANDLE is broken :(
+
 ##### UPDATE  8/11/2018
 ### ChangeLog:
 #### Fixed Mission to work with build 0.63.149358
