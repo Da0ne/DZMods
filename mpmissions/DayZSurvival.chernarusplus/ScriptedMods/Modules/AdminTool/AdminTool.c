@@ -25,6 +25,13 @@ class AdminTool extends ModuleManager
 		m_TPLocations  = new map<string, vector>; //name of town, pos
 		m_ExtendedCommands = new map<string,int>; //Command, length
 		
+		/*ADD YOUR STEAM 64 EXACTLY LIKE HOW ITS SHOW BELOW HERE.*/
+		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
+		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
+		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
+		m_AdminList.Insert("76561198420222029","null"); //UID , NAME
+		
+		/*
 		//-----Add Admins from txt-----
 		FileHandle AdminUIDSFile = OpenFile(m_AdminListPath + "Admins.txt", FileMode.READ);
 		if (AdminUIDSFile != 0)
@@ -37,7 +44,7 @@ class AdminTool extends ModuleManager
 			}
 			CloseFile(AdminUIDSFile);
 		}
-		
+		*/
 		//Add Towns to TP array
 		m_TPLocations.Insert( "Severograd", "8428.0 0.0 12767.1" );
 		m_TPLocations.Insert( "Krasnostav", "11172.0 0.0 12314.1" );
