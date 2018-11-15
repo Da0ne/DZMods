@@ -97,6 +97,7 @@ class AdminTool extends ModuleManager
 		m_ExtendedCommands.Insert("/tpalltome",1);
 		m_ExtendedCommands.Insert("/killall",1);
 		m_ExtendedCommands.Insert("/spawncar",1);
+		m_ExtendedCommands.Insert("/refuel",1);
 	}
 	
 	void AdminTool( DayZSurvival missionServer )
@@ -483,30 +484,57 @@ class AdminTool extends ModuleManager
 							break;
 							
 							case "/spawncar":
-							EntityAI MyV3S;
-							vector NewPosition;
-							vector OldPosition;
-							OldPosition = Admin.GetPosition();
-							NewPosition[0] = OldPosition[0] + 1.5;
-							NewPosition[1] = OldPosition[1] + 0.2;
-							NewPosition[2] = OldPosition[2] + 1.5;
-							MyV3S = GetGame().CreateObject( "OffroadHatchback", NewPosition, false, true, true );		            
-							MyV3S.GetInventory().CreateAttachment("HatchbackHood");
-							MyV3S.GetInventory().CreateAttachment("HatchbackTrunk");
-							MyV3S.GetInventory().CreateAttachment("HatchbackDoors_CoDriver");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("SparkPlug");
-							MyV3S.GetInventory().CreateAttachment("EngineBelt");
-							MyV3S.GetInventory().CreateAttachment("CarBattery");
-							auto carfluids = Car.Cast( MyV3S );
-							carfluids.Fill( CarFluid.FUEL, 1000 );
-							carfluids.Fill( CarFluid.OIL, 1000 );
-							carfluids.Fill( CarFluid.BRAKE, 1000 );
-							carfluids.Fill( CarFluid.COOLANT, 1000 );
-							    break;
+								Car MyNiva;
+								vector position = Admin.GetPosition();
+								float adminHeading = MiscGameplayFunctions.GetHeadingAngle(Admin);
+								vector posModifier = Vector(-(3 * Math.Sin(adminHeading)), 0, 3 * Math.Cos(adminHeading));
+								
+								MyNiva = Car.Cast(GetGame().CreateObject( "OffroadHatchback", position + posModifier, false, true, true ));		            
+								MyNiva.GetInventory().CreateAttachment("HatchbackHood");
+								MyNiva.GetInventory().CreateAttachment("HatchbackTrunk");
+								MyNiva.GetInventory().CreateAttachment("HatchbackDoors_CoDriver");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("SparkPlug");
+								MyNiva.GetInventory().CreateAttachment("EngineBelt");
+								MyNiva.GetInventory().CreateAttachment("CarBattery");
+								
+								MyNiva.Fill( CarFluid.FUEL, MyNiva.GetFluidCapacity( CarFluid.FUEL ) );
+								MyNiva.Fill( CarFluid.OIL, MyNiva.GetFluidCapacity( CarFluid.OIL ) );
+								MyNiva.Fill( CarFluid.BRAKE, MyNiva.GetFluidCapacity( CarFluid.BRAKE ) );
+								MyNiva.Fill( CarFluid.COOLANT, MyNiva.GetFluidCapacity( CarFluid.COOLANT ) );
+								
+								Msgparam = new Param1<string>( "Niva spawned." );
+								GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+							break;
+							
+							case "/refuel": 
+								ref array<Object> nearest_objects = new array<Object>;
+								ref array<CargoBase> proxy_cargos = new array<CargoBase>;
+								Car toBeFilled;
+								vector position = Admin.GetPosition();
+								GetGame().GetObjectsAtPosition ( position, 10, nearest_objects, proxy_cargos );
+			
+								for (i = 0; i < nearest_objects.Count(); i++) {
+									if (nearest_objects[i].IsKindOf("CarScript")) {
+										toBeFilled = Car.Cast(nearest_objects[i]);
+
+										float fuelReq = toBeFilled.GetFluidCapacity( CarFluid.FUEL ) - (toBeFilled.GetFluidCapacity( CarFluid.FUEL ) * toBeFilled.GetFluidFraction( CarFluid.FUEL ));
+										float oilReq = toBeFilled.GetFluidCapacity( CarFluid.OIL ) - (toBeFilled.GetFluidCapacity( CarFluid.OIL ) * toBeFilled.GetFluidFraction( CarFluid.OIL ));
+										float coolantReq = toBeFilled.GetFluidCapacity( CarFluid.COOLANT ) - (toBeFilled.GetFluidCapacity( CarFluid.COOLANT ) * toBeFilled.GetFluidFraction( CarFluid.COOLANT ));
+										float brakeReq = toBeFilled.GetFluidCapacity( CarFluid.BRAKE ) - (toBeFilled.GetFluidCapacity( CarFluid.BRAKE ) * toBeFilled.GetFluidFraction( CarFluid.BRAKE ));
+										toBeFilled.Fill( CarFluid.FUEL, fuelReq );
+										toBeFilled.Fill( CarFluid.OIL, oilReq );
+										toBeFilled.Fill( CarFluid.COOLANT, coolantReq );
+										toBeFilled.Fill( CarFluid.BRAKE, brakeReq );
+
+										Msgparam = new Param1<string>( nearest_objects[i]+" refueled, "+fuelReq+"L added, all fluids maxed" );
+										GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+									}
+								}
+				
 							break;
 
 							default:
