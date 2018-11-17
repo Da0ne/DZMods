@@ -458,6 +458,7 @@ class AdminTool extends ModuleManager
 								 GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
 								 Admin.SetHealth( Admin.GetMaxHealth( "", "" ) );
 								 Admin.SetHealth( "","Blood", Admin.GetMaxHealth( "", "Blood" ) );
+								 Admin.SetBleedingBits(0);
 							break;
 
 							case "/kill":
