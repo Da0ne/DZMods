@@ -226,6 +226,8 @@ class AdminTool extends ModuleManager
 				{
 					ref array<string> chatData = CheckCommand(chatLine);
 					string cCommand, cData;
+					vector temppos;
+
 					if (chatData != NULL)
 					{
 						cCommand = chatData.Get(0);
@@ -281,14 +283,14 @@ class AdminTool extends ModuleManager
 							break;
 
 							case "/tpto":
-								vector position = "0 0 0";
+								temppos = "0 0 0";
 								if (m_TPLocations.Contains(cData))
 								{
-									m_TPLocations.Find( cData, position );
+									m_TPLocations.Find( cData, temppos );
 
 									vector ofixPlayerPos;
-									ofixPlayerPos[0] = position[0];
-									ofixPlayerPos[2] = position[2];
+									ofixPlayerPos[0] = temppos[0];
+									ofixPlayerPos[2] = temppos[2];
 
 									ofixPlayerPos = SnapToGround( ofixPlayerPos );
 
@@ -485,11 +487,11 @@ class AdminTool extends ModuleManager
 							
 							case "/spawncar":
 								Car MyNiva;
-								vector position = Admin.GetPosition();
+								temppos = Admin.GetPosition();
 								float adminHeading = MiscGameplayFunctions.GetHeadingAngle(Admin);
 								vector posModifier = Vector(-(3 * Math.Sin(adminHeading)), 0, 3 * Math.Cos(adminHeading));
 								
-								MyNiva = Car.Cast(GetGame().CreateObject( "OffroadHatchback", position + posModifier, false, true, true ));		            
+								MyNiva = Car.Cast(GetGame().CreateObject( "OffroadHatchback", temppos + posModifier, false, true, true ));
 								MyNiva.GetInventory().CreateAttachment("HatchbackHood");
 								MyNiva.GetInventory().CreateAttachment("HatchbackTrunk");
 								MyNiva.GetInventory().CreateAttachment("HatchbackDoors_CoDriver");
@@ -514,9 +516,9 @@ class AdminTool extends ModuleManager
 								ref array<Object> nearest_objects = new array<Object>;
 								ref array<CargoBase> proxy_cargos = new array<CargoBase>;
 								Car toBeFilled;
-								vector position = Admin.GetPosition();
-								GetGame().GetObjectsAtPosition ( position, 10, nearest_objects, proxy_cargos );
 			
+								temppos = Admin.GetPosition();
+								GetGame().GetObjectsAtPosition ( temppos, 10, nearest_objects, proxy_cargos );
 								for (i = 0; i < nearest_objects.Count(); i++) {
 									if (nearest_objects[i].IsKindOf("CarScript")) {
 										toBeFilled = Car.Cast(nearest_objects[i]);
@@ -530,7 +532,7 @@ class AdminTool extends ModuleManager
 										toBeFilled.Fill( CarFluid.COOLANT, coolantReq );
 										toBeFilled.Fill( CarFluid.BRAKE, brakeReq );
 
-										Msgparam = new Param1<string>( nearest_objects[i]+" refueled, "+fuelReq+"L added, all fluids maxed" );
+										Msgparam = new Param1<string>( nearest_objects[i].ToString()+" refueled, "+fuelReq+"L added, all fluids maxed" );
 										GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
 									}
 								}
