@@ -1,8 +1,10 @@
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\Misc\\CustomBuildings\\SpawnedBuilding.c"
 typedef array<ref SpawnedBuilding> CustomBuildings;
 
-class BuildingSpawner{
-	void Init(){
+class BuildingSpawner
+{
+	void Init()
+	{
 		Print("BuildingSpawner::Init: Starting...");
 	   /*
 		* Configuration Here:
@@ -17,7 +19,7 @@ class BuildingSpawner{
 					new SpawnedBuilding("Land_Airfield_Hangar_Green", "11990.633789 146.399136 12485.503906", "-157.000046 -1.000000 -0.000000")
 	    */
 		ref CustomBuildings buildings = {
-			//Add new SpawnedBuilding here.
+			//Add new more SpawnedBuilding here.
 			new SpawnedBuilding("Land_Airfield_Hangar_Green", "11990.633789 146.399136 12485.503906", "-157.000046 -1.000000 -0.000000"),
 		};
 		spawnCustomBuildings(buildings);
@@ -25,7 +27,8 @@ class BuildingSpawner{
 	
 	void spawnCustomBuildings(ref CustomBuildings collection)
 	{
-		if(collection.Count() == 0){
+		if(collection.Count() == 0)
+		{
 			Print("BuildingSpawner::spawnCustomBuildings: buildings Array is Empty.");
 			return;
 		}

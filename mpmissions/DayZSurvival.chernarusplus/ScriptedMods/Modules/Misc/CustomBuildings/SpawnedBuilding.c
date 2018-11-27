@@ -1,9 +1,11 @@
-class SpawnedBuilding{
+class SpawnedBuilding
+{
 	string m_name;
 	string m_location;
 	string direction_facing;
 
-	void SpawnedBuilding(string building_name, string location, string orientation){
+	void SpawnedBuilding(string building_name, string location, string orientation)
+	{
 		this.m_name = building_name;
 		this.m_location = location;
 		this.direction_facing = orientation;
@@ -12,15 +14,18 @@ class SpawnedBuilding{
 	void ~SpawnedBuilding(){
 	}
 
-	string getName(){
+	string getName()
+	{
 		return this.m_name;
 	}
 
-	string getLocation(){
+	string getLocation()
+	{
 		return this.m_location;
 	}
 
-	string getOrientation(){
+	string getOrientation()
+	{
 		return this.direction_facing;
 	}
 };
