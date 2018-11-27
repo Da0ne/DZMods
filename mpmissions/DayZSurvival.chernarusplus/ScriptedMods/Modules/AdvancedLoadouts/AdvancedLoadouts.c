@@ -77,8 +77,7 @@ class AdvancedLoadouts extends ModuleManager
 	{
 		//Gets cargo within cargo as well
 		array<string> ret = new array<string>;
-		InventoryItem item;
-		Class.CastTo(item, SentItem);
+		InventoryItem item = InventoryItem.Cast(SentItem);
 	
 		if (!item) return NULL;
 	
@@ -87,29 +86,25 @@ class AdvancedLoadouts extends ModuleManager
 			CargoBase cargo = item.GetInventory().GetCargo();
 			for (int j = 0; j < cargo.GetItemCount(); j++)
 			{
-				InventoryItemBase inventoryItem;
-				Class.CastTo(inventoryItem, cargo.GetItem(j));
+				InventoryItemBase inventoryItem = InventoryItemBase.Cast(cargo.GetItem(j));
 				ret.Insert(inventoryItem.GetType());
-
-				if (inventoryItem.GetInventory().GetCargo()) //Check for Cargo within cargo
+				
+				CargoBase Subcargo = inventoryItem.GetInventory().GetCargo();
+				if (Subcargo) //Check for Cargo within cargo
 				{
-					CargoBase Subcargo = inventoryItem.GetInventory().GetCargo();
 					for (j = 0; j < Subcargo.GetItemCount(); ++j)
 					{
-						InventoryItemBase SubinventoryItem;
-						Class.CastTo(SubinventoryItem, Subcargo.GetItem(j));
-						ret.Insert(SubinventoryItem.GetType());
+						InventoryItemBase cargoItem = InventoryItemBase.Cast(Subcargo.GetItem(j));
+						ret.Insert(cargoItem.GetType());
 					}
 				}
 				else
 				{
-					if (SubinventoryItem.GetInventory().AttachmentCount())
+					if (inventoryItem.GetInventory().AttachmentCount())
 					{
-						for (j = 0; j < SubinventoryItem.GetInventory().AttachmentCount(); ++j)
+						for (j = 0; j < inventoryItem.GetInventory().AttachmentCount(); ++j)
 						{
-							InventoryItemBase SubAtt;
-							Class.CastTo(SubAtt, SubinventoryItem);
-							ret.Insert(SubAtt.GetInventory().GetAttachmentFromIndex(j).GetType());
+							ret.Insert(inventoryItem.GetInventory().GetAttachmentFromIndex(j).GetType());
 						}
 					}
 				}
@@ -118,8 +113,8 @@ class AdvancedLoadouts extends ModuleManager
 		else
 		{
 			for (j = 0; j < item.GetInventory().AttachmentCount(); j++)
-			{
-				Class.CastTo(inventoryItem, item.GetInventory().GetAttachmentFromIndex(j));
+			{	
+				inventoryItem = InventoryItemBase.Cast(item.GetInventory().GetAttachmentFromIndex(j));
 				ret.Insert(inventoryItem.GetType());
 			}
 		}
@@ -274,6 +269,8 @@ class AdvancedLoadouts extends ModuleManager
         		JsonFileLoader<map<string,map<string,map<string,map<string,map<string, ref array<string>>>>>>>.JsonSaveFile(file_path + ".json", SlotData);
         	}
         }
+
+        Print("File " + file_path + " was writen by the use of the export command.");
 	}
 
 	//=========================Import + Spwn Loadout Functions =================================
