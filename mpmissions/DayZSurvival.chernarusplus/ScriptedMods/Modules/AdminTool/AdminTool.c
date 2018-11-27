@@ -119,7 +119,7 @@ class AdminTool extends ModuleManager
 
 		for ( int i = 0; i < players.Count(); ++i )
 		{
-			PlayerBase Target = players.Get(i);
+			PlayerBase Target = PlayerBase.Cast(players.Get(i));
 			Target.SetPosition( AdminPos );
 		}
 		return i;
@@ -128,7 +128,6 @@ class AdminTool extends ModuleManager
 	void oSpawnItemFunc(bool ground, PlayerBase player, string ClassName)
 	{
 		EntityAI item;
-		ItemBase itemBs
 
 		vector NewPosition;
 		vector OldPosition;
@@ -141,11 +140,11 @@ class AdminTool extends ModuleManager
 			NewPosition[1] = OldPosition[1] + 0.1;
 			NewPosition[2] = OldPosition[2] + 1.5;
 
-			item = GetGame().CreateObject( ClassName, NewPosition, false, true );
+			item = EntityAI.Cast(GetGame().CreateObject( ClassName, NewPosition, false, true ));
 		}else{
-
-			item = player.GetInventory().CreateInInventory( ClassName );
-			itemBs = ItemBase.Cast(item);	
+			
+			item = EntityAI.Cast(player.GetInventory().CreateInInventory( ClassName ));
+			ItemBase itemBs = ItemBase.Cast(item);
 			itemBs.SetQuantity(1);
 		}
 	}
@@ -213,7 +212,7 @@ class AdminTool extends ModuleManager
 			{
 				if (players.Get(i).GetIdentity().GetName() == chat_params.param2 && m_AdminList.Contains(players.Get(i).GetIdentity().GetPlainId()))
 				{
-					Admin 		  = players.Get(i);
+					Admin 		  = PlayerBase.Cast(players.Get(i));
 					AdminIdentity = Admin.GetIdentity();
 					AdminUID 	  = AdminIdentity.GetPlainId();
 				}
@@ -236,7 +235,7 @@ class AdminTool extends ModuleManager
 						case "/strip":
 								for ( int a = 0; a < players.Count(); ++a )
 								{
-									selectedPlayer = players.Get(a);
+									selectedPlayer = PlayerBase.Cast(players.Get(a));
 									selectedIdentity = selectedPlayer.GetIdentity();
 									if ( selectedIdentity.GetName() == cData )
 									{
@@ -263,7 +262,7 @@ class AdminTool extends ModuleManager
 							case "/tpp":
 								for ( int z = 0; z < players.Count(); ++z )
 								{
-									selectedPlayer = players.Get(z);
+									selectedPlayer = PlayerBase.Cast(players.Get(z));
 									selectedIdentity = selectedPlayer.GetIdentity();
 									if ( selectedIdentity.GetName() == cData )
 									{
@@ -352,7 +351,7 @@ class AdminTool extends ModuleManager
 							if( CurrentWeapon )
 								{
 									CurrentWeapon.SetHealth( CurrentWeapon.GetMaxHealth( "", "" ) );
-									Magazine foundMag = ( Magazine ) CurrentWeapon.GetAttachmentByConfigTypeName( "DefaultMagazine" );
+									Magazine foundMag = Magazine.Cast(CurrentWeapon.GetAttachmentByConfigTypeName( "DefaultMagazine" ));
 									if( foundMag && foundMag.IsMagazine())
 									{
 										foundMag.ServerSetAmmoMax();
@@ -474,7 +473,7 @@ class AdminTool extends ModuleManager
 							case "/killall":
 								for ( int ig = 0; ig < players.Count(); ++ig )
 								{
-									PlayerBase Target = players.Get(ig);
+									PlayerBase Target = PlayerBase.Cast(players.Get(ig));
 									if ( Target.GetIdentity() != AdminIdentity )
 									{
 										Target.SetHealth(0);						
@@ -483,30 +482,35 @@ class AdminTool extends ModuleManager
 							break;
 							
 							case "/spawncar":
-							EntityAI MyV3S;
-							vector NewPosition;
-							vector OldPosition;
-							OldPosition = Admin.GetPosition();
-							NewPosition[0] = OldPosition[0] + 1.5;
-							NewPosition[1] = OldPosition[1] + 0.2;
-							NewPosition[2] = OldPosition[2] + 1.5;
-							MyV3S = GetGame().CreateObject( "OffroadHatchback", NewPosition, false, true, true );		            
-							MyV3S.GetInventory().CreateAttachment("HatchbackHood");
-							MyV3S.GetInventory().CreateAttachment("HatchbackTrunk");
-							MyV3S.GetInventory().CreateAttachment("HatchbackDoors_CoDriver");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("HatchbackWheel");
-							MyV3S.GetInventory().CreateAttachment("SparkPlug");
-							MyV3S.GetInventory().CreateAttachment("EngineBelt");
-							MyV3S.GetInventory().CreateAttachment("CarBattery");
-							auto carfluids = Car.Cast( MyV3S );
-							carfluids.Fill( CarFluid.FUEL, 1000 );
-							carfluids.Fill( CarFluid.OIL, 1000 );
-							carfluids.Fill( CarFluid.BRAKE, 1000 );
-							carfluids.Fill( CarFluid.COOLANT, 1000 );
-							    break;
+								EntityAI MyV3S;
+								vector NewPosition;
+								vector OldPosition;
+								OldPosition = Admin.GetPosition();
+								NewPosition[0] = OldPosition[0] + 1.5;
+								NewPosition[1] = OldPosition[1] + 0.2;
+								NewPosition[2] = OldPosition[2] + 1.5;
+								MyV3S = EntityAI.Cast(GetGame().CreateObject( "OffroadHatchback", NewPosition, false, true, true ));
+								Car VS3_Car_Type = Car.Cast( MyV3S );
+
+								ref array<string> carParts = {
+									"HatchbackHood", "HatchbackTrunk",
+									"HatchbackDoors_CoDriver", "HatchbackDoors_Driver",
+									"HatchbackWheel", "HatchbackWheel",
+									"HatchbackWheel", "HatchbackWheel",
+									"SparkPlug", "CarBattery",
+									"CarRadiator", "EngineBelt",
+									"HeadlightH7", "HeadlightH7",
+								};
+
+								for(int cs = 0; cs < carParts.Count(); cs++)
+								{
+									MyV3S.GetInventory().CreateAttachment(carParts.Get(cs));
+								}							
+				
+								VS3_Car_Type.Fill(CarFluid.FUEL, 1000);
+								VS3_Car_Type.Fill(CarFluid.OIL, 1000);
+								VS3_Car_Type.Fill(CarFluid.BRAKE, 1000);
+								VS3_Car_Type.Fill(CarFluid.COOLANT, 1000);
 							break;
 
 							default:
