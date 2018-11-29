@@ -41,7 +41,7 @@
 ##### NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
 
 # Configuration:
-- In order to turn on, or off different functionality, check the top of '/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c
+- In order to turn on, or off different functionality, check the top of '/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c'
 
 # Features:
 
