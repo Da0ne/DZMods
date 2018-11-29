@@ -29,7 +29,7 @@ NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; th
 2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
 3. Place the 'ModdedScripts' directory into your server's main directory.
 
-## Step Four:
+## Step Three:
 1. Change your startup command line to include:
 
 ```bash
