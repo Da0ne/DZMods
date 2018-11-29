@@ -38,7 +38,7 @@ NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; th
 
 NOTE: The -name tag will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
 
-NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
+NOTE: If you forget -scrAllowFileWrite than the server will not be able to save your custom loadouts.
 
 # Configuration:
 - In order to turn on, or off different functionality, check the top of '/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c'
