@@ -3,7 +3,7 @@ class InfectedHordes
 	ref map<string, vector> m_HordePositions = new map<string, vector>;
 
 	string m_NewHordeMsg 	  = "A New Horde of Zombies Showed up Around: ";
-	string m_LastSennHordeMsg = "The Horde of Zombies Was Last Seen Around: ";
+	string m_LastSeenHordeMsg = "The Horde of Zombies Was Last Seen Around: ";
 
 	int CURRENT_STAMP;
 	int CURRENT_STAMP_MSG;
