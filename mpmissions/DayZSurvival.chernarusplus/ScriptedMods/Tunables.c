@@ -44,10 +44,6 @@ class ModTunables extends ModuleManager
 			return m_StaminaStatus;
 			break;
 
-			case "CustomBuildings":
-			return m_CustomBuildings;
-			break;
-
 			case "SessionFeed":
 			return m_SessionFeed;
 			break;
@@ -74,7 +70,19 @@ class ModTunables extends ModuleManager
 			case "SafeZone":
 			return m_SafeZone;
 			break;
+
+			case "CustomBuildings":
+			return m_CustomBuildings;
+			break;
 		}
 		return false;
+	}
+
+	CustomBuildings getBuildingList(){
+		return {
+			//Add new more SpawnedBuilding here.
+			//new SpawnedBuilding(string buildingName, string location, string orientation),
+			new SpawnedBuilding("Land_Airfield_Hangar_Green", "11990.633789 146.399136 12485.503906", "-157.000046 -1.000000 -0.000000"),
+		};
 	}
 }

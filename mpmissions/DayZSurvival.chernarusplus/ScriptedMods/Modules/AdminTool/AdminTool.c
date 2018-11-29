@@ -119,7 +119,8 @@ class AdminTool extends ModuleManager
 
 		for ( int i = 0; i < players.Count(); ++i )
 		{
-			PlayerBase Target = PlayerBase.Cast(players.Get(i));
+			PlayerBase Target;
+			Class.CastTo(Target, players.Get(i));
 			Target.SetPosition( AdminPos );
 		}
 		return i;
@@ -128,6 +129,7 @@ class AdminTool extends ModuleManager
 	void oSpawnItemFunc(bool ground, PlayerBase player, string ClassName)
 	{
 		EntityAI item;
+		ItemBase itemBs;
 
 		vector NewPosition;
 		vector OldPosition;
@@ -140,11 +142,11 @@ class AdminTool extends ModuleManager
 			NewPosition[1] = OldPosition[1] + 0.1;
 			NewPosition[2] = OldPosition[2] + 1.5;
 
-			item = EntityAI.Cast(GetGame().CreateObject( ClassName, NewPosition, false, true ));
+			Class.CastTo(item, GetGame().CreateObject( ClassName, NewPosition, false, true ));
 		}else{
 			
 			item = EntityAI.Cast(player.GetInventory().CreateInInventory( ClassName ));
-			ItemBase itemBs = ItemBase.Cast(item);
+			Class.CastTo(itemBs, item);
 			itemBs.SetQuantity(1);
 		}
 	}
@@ -212,7 +214,7 @@ class AdminTool extends ModuleManager
 			{
 				if (players.Get(i).GetIdentity().GetName() == chat_params.param2 && m_AdminList.Contains(players.Get(i).GetIdentity().GetPlainId()))
 				{
-					Admin 		  = PlayerBase.Cast(players.Get(i));
+					Class.CastTo(Admin, players.Get(i));
 					AdminIdentity = Admin.GetIdentity();
 					AdminUID 	  = AdminIdentity.GetPlainId();
 				}
@@ -235,7 +237,7 @@ class AdminTool extends ModuleManager
 						case "/strip":
 								for ( int a = 0; a < players.Count(); ++a )
 								{
-									selectedPlayer = PlayerBase.Cast(players.Get(a));
+									Class.CastTo(selectedPlayer, players.Get(a));
 									selectedIdentity = selectedPlayer.GetIdentity();
 									if ( selectedIdentity.GetName() == cData )
 									{
@@ -262,7 +264,7 @@ class AdminTool extends ModuleManager
 							case "/tpp":
 								for ( int z = 0; z < players.Count(); ++z )
 								{
-									selectedPlayer = PlayerBase.Cast(players.Get(z));
+									Class.CastTo(selectedPlayer, players.Get(z));
 									selectedIdentity = selectedPlayer.GetIdentity();
 									if ( selectedIdentity.GetName() == cData )
 									{
@@ -319,6 +321,10 @@ class AdminTool extends ModuleManager
 							break;
 
 							case "/tpc":
+								if(Admin.GetTransport()){
+									Print("Admin is inside of Transport.");
+									break;
+								}
 								vector tpPos = cData.ToVector();
 								vector fixPlayerPos;
 								fixPlayerPos[0] = tpPos[0];
@@ -350,8 +356,10 @@ class AdminTool extends ModuleManager
 							EntityAI CurrentWeapon = Admin.GetHumanInventory().GetEntityInHands();
 							if( CurrentWeapon )
 								{
+									Magazine foundMag;
 									CurrentWeapon.SetHealth( CurrentWeapon.GetMaxHealth( "", "" ) );
-									Magazine foundMag = Magazine.Cast(CurrentWeapon.GetAttachmentByConfigTypeName( "DefaultMagazine" ));
+									Class.CastTo(foundMag, CurrentWeapon.GetAttachmentByConfigTypeName("DefaultMagazine"));
+
 									if( foundMag && foundMag.IsMagazine())
 									{
 										foundMag.ServerSetAmmoMax();
@@ -473,7 +481,9 @@ class AdminTool extends ModuleManager
 							case "/killall":
 								for ( int ig = 0; ig < players.Count(); ++ig )
 								{
-									PlayerBase Target = PlayerBase.Cast(players.Get(ig));
+									PlayerBase Target;
+									Class.CastTo(Target, players.Get(ig));
+
 									if ( Target.GetIdentity() != AdminIdentity )
 									{
 										Target.SetHealth(0);						
