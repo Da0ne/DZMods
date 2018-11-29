@@ -15,8 +15,9 @@
 ----------------------------------------------------------------------------------------------------------------------
 
 ## Installation:
-#### NOTE: If you have previously edited your loot XMLs, make sure you replace the XMLs inside of DayZSurvival.chernarusplus'.
-#### NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; this is the same with other XML files.
+NOTE: If you have previously edited your loot XMLs, make sure you replace the XMLs inside of DayZSurvival.chernarusplus'.
+
+NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; this is the same with other XML files.
 
 ## Step One:
 1. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
@@ -26,9 +27,7 @@
 ## Step Two:
 1. Back back to the servers main directory, and move the 'serverDZ.cfg' file into the folder you named in Step One.
 2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
-
-## Step Three:
-1. Place the 'ModdedScripts' directory into your server's main directory.
+3. Place the 'ModdedScripts' directory into your server's main directory.
 
 ## Step Four:
 1. Change your startup command line to include:
