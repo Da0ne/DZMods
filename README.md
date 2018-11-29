@@ -31,7 +31,7 @@
 1. Place the 'ModdedScripts' directory into your server's main directory.
 
 ## Step Four:
-1. Change your startup command line to:
+1. Change your startup command line to include:
 
 ```bash
 -mod=ModdedScripts -config=FolderFromStepOne\serverDZ.cfg -profiles=FolderFromStepOne -name=myServerName -scrAllowFileWrite
