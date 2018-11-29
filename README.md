@@ -1,34 +1,5 @@
-
 # DayZ Vanilla++ Mission by DaOne v0.2
-#### CREDITS: @Sen (@zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
-#### NOTE: DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
-
-##### UPDATE  8/11/2018
-### ChangeLog:
-#### Fixed Mission to work with build 0.63.149358
-#### The Mission was re-structered
-#### 'ModSettings.c' is not a thing anymore, check 'Tunables.c'
-### Issues:
-#### Custom MOTD mod is currently unfucntional, due to its terrible state.
-
-##### UPDATE  31/10/2018
-### ChangeLog:
-####  New Features/Changes to existing features:
-#### -Removed the use of command lines as keys to disable and enable mods due to complications with third party hosting services
-#### -Added 'ModSettings.c' that handles all the mod options. Enabling/Disabling features are all now manipulated via this file.
-#### -Added the ability to generate and save static loadouts.
- >Usage: As an admin use the command /export and the gear that is currently on your player will be saved and can be utilized as a loadout-on-spawn if you enable 'm_CustomLoadouts' & 'm_StaticLoadouts' make sure to disable 'm_RandomizedLoadouts'
- -Added Customizable Infected randomized server events. ( check InfectedHordes.c For more info )
- -AdminTool: Added a new command  /LoadoutType used to switch from using static loadouts to randomized. Works only if custom loadouts is enabled in ModSettings.c
-  
-  
-#### BugFixes:
--Fixed a bug with the AdminTool printing error messages in crash.log and scripts.log due to shitty code :P
--Improved the functionailty of some loops that could have caused possible FPS drops (safezone...)
-
-#### KnownIssues:
--New Loadout feature does not attach secondary weapon attachmnets (pistol/weapon that is placed within an inventory container).
--SafeZone Godmode is not really godmode thats because the damage fucntions are hard-codded into the game engine.
+#### DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
 #### Future Plans & updates:
  -Support for client side.
@@ -36,55 +7,60 @@
  - Fully Customizable Randomized AI server events.
  - Support of 'event mode' ( switching the server from survival to PvP style with ability to customize playzones,match duration etc )
 ----------------------------------------------------------------------------------------------------------------------
-## How to Setup
 ### IMPORTANT : For those who own a server provide by [www.Vilayer.com](Vilayer.com), can auto install the mod via the `AddonManager` (special thanks goes to the Vilayer team)!
 ![Vilayer.com](https://ci5.googleusercontent.com/proxy/yE1RaRsPdehe3Y5lTBg3K2UmKkKYBPUl4HOLneY8hzalp34EayGB0c8qeUxsz4W_vaGETV57DzOYC1huj7bvJmDlyfIodhIE2p07uyLeVuvkyCvCOmKg=s0-d-e1-ft#https://www.vilayer.com/templates/ColoNode/html/img/logo_dark.png)
-### Step One:
-##### Go to your server directory and create a folder, name the folder what ever you desire son. (just give it a damn name that is not NewFolder)
+----------------------------------------------------------------------------------------------------------------------
 
-### Step Two:
-##### open the folder 'mpmissions' in your server directory, copy the file 'DayZSurvival.chernarusplus' and place it in there. (If you had any edits done to your loot xmls and wish to keep the storage make sure you replace it with the ones that are in 'DayZSurvival.chernarusplus' ) The db folder contains NO MODDED features/changes its all vanilla same goes with other xmls. Replace it with your modded xmls if you wish to.
+## Installation:
+#### NOTE: If you have previously edited your loot XMLs, make sure you replace the XMLs inside of DayZSurvival.chernarusplus'.
+#### NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; this is the same with other XML files.
 
-### Step Three:
-##### The server config file 'serverDZ.cfg' is in the main directory (Vanilla Fresh copy from steam), MOVE that file into the folder you created in step 1 Open up the config file and go to the bottom where you see 'dayzOffline.chernarusplus' REPLACE IT with 'DayZSurvival.chernarusplus' Save and exit.
+## Step One:
+##### 	1. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
+##### 	2. Open the 'mpmissions' which is located inside of your server directory.
+##### 	3. Copy 'DayZSurvival.chernarusplus' into this location.
 
-### Step Four:
-##### Place the foler 'ModdedScripts' into your main DayZ Server directory where the .exe is and all that stuff.
+## Step Two:
+##### 1. Back back to the servers main directory, and move the 'serverDZ.cfg' file into the folder you named in Step One.
+##### 2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
 
-### Step Five:
-##### add the following startup command lines to your server: -mod=ModdedScripts -config=NameOfFolderFromStep1\serverDZ.cfg -profiles=NameOfFolderFromStep1 -name=myServerName The -name command will change the name that shows up in global chat. When players join/leave/getkilled and other GlobalMessages. if you wish to actiavte any other mods listed in the Features list. Just add the command line to whatever starts your server exe.
+## Step Three:
+##### 1. Place the 'ModdedScripts' directory into your server's main directory.
 
+## Step Four:
+##### 1. Change your startup command line to:
+```bash
+-mod=ModdedScripts -config=FolderFromStepOne\serverDZ.cfg -profiles=FolderFromStepOne -name=myServerName -scrAllowFileWrite
+```
+#### NOTE: The -name tag will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
+#### NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
 
 # ----Features----
 
 ## -Enable/Disable player Join/leave messages. Check the file "Settings.C"
 
-##  -Ability to Enabled/Disable Custom Spawn lodaouts.
-#####  This feature allows the fresh spawn players to load in with preset randomized gear. To Configure the type of items to spawn on your players check the folder "mpmissions/DayZSurvival.chernarusplus/ScriptedMods/LoadOuts" Each Catagory is in a seperate .txt file If you wish to remove an item or add, make sure you follow the same layout as the file comes in. The Script will randomly select an item from each catagory. If you wish to remove a certain catagory simply leave the file empty or delete it. You can modify the lodaouts while the server is running! After you make your edits login as admin in game and use the Admin command /updateLoadouts
+## Custom Spawn lodaouts.
+### This feature allows the server to create loadouts for fresh spawns to spawn with.
 
-## -Ability to Enable/Disable Weapons on spawn.
-##### This feature allows you to give fresh spawns a gun on startup To edit the types of guns it spawns, go into the following file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/DayZSurvival.c " LINE 352 That function is a randomizer. This might be helpful --> SpawnGunIn( PlayerBase player, string ClassName, bool isPrimary, TstringArray Attachments, TstringArray Extras) NOTE:  Set bool isPrimary to 'true' if you wish to make the weapon a primary
+## Enable/Disable Stamina
+### Add -DisableStamina to your startup commandline to enable, and remove it from your startup commandline.
 
+## Spawn Custom Buildings
+### This feature allows the server owner to place CustomBuildings by minimalizing the amount of code needed to spawn in additional buildings.
 
-## - Disable/Enable stamina Add this command line -DisableStamina  to disable it on server startup.
-
-## - Custom SafeZone with gmode.
-##### This feature allows you to place a safezone anywhere on the map with a radius you wish for. To modifiy the safeZone area check this file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/SafeZoneFunctions "
-
-## - Spawn Custom Buildings anywhere on the map
-##### This feature is just an easy way to place your CustomBuildings code in a tidy spot and not in the main init where shit gets clustred. Check the file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/BuildingSpawner.c" it does not matter how you spawn your buildings or set thier direction oritention etc, just make sure the script is inside the Void() to get executed on server startup A nice way to get buildings imported is to use the COM (Community Offline Mode from Arkensor). You can place buidlings and extract thier info. Thank @DannyDog for that feature
-
-## - Chat Based Admin Tool set.  
-#### Simply Add your steam 64 ID into the file mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Admins.txt" Set a server admin password in the server.cfg, in game login using the password. #login myPassword The Admintoolset feature can be found here: https://pastebin.com/GGrCDg3f
-
-## - Player score tracking system and Kill Activity tracker with timestamps
-##### This feature creates two files in the server profile ( if you use -instance command line it would be placed there ) the serevr profile is in Documents folder by deafult (its where your logs are). provides detailed kill log and records players stats such as total deaths and total kills on the server. This feature is implemented within the mod.
-
-## - Chat based kill messages
-##### Shows who killed who, committed suicide.
-
-## - Custom MOTD based within the mission
-##### Random preset messages popup for all players. To change the messages check the file " mpmissions/DayZSurvival.chernarusplus/ScriptedMods/MOTDMessages.c "
+## Chatbased Admin Tools
+### This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg.
+### An admin can login by typing the following into DayZ's chat system:
+```
+#login mypassword
+```
+## Player Score/Kill Activity Tracker
+### This feature creates two files into the servers profile, and stores detailed kill information and player stats such as total deaths, and kills.
+## Chatbased Kill Messages
+### Sends chat messages showing who killed who, and who committed suicide.
 
 ### USEFUL THINGS:
 #### How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
+
+## CREDITS:
+### @Sen ( @zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
