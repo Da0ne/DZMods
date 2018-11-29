@@ -1,7 +1,7 @@
-# DayZ Vanilla++ Mission by DaOne v0.2
+# DayZ Vanilla++ Mission by DaOne v0.3
 #### DO NOT sign the mod ModdedScripts, if you do then verifySignature would not work!!
 
-#### Future Plans & updates:
+#### Future Plans & Updates:
  - Support for client side.
 	- UI for trader system, admin tool interface/panel, Customizable map UI, Killfeed UI
  - Fully Customizable Randomized AI server events.
@@ -15,7 +15,7 @@
 ----------------------------------------------------------------------------------------------------------------------
 
 ## Installation:
-NOTE: If you have previously edited your loot XMLs, make sure you replace the XMLs inside of DayZSurvival.chernarusplus'.
+NOTE: If you have previously edited your loot XMLs, make sure you replace the XMLs inside of  '/mpmission/DayZSurvival.chernarusplus' with your already edited XMLs/Server files.
 
 NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; this is the same with other XML files.
 
