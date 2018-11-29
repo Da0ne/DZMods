@@ -510,6 +510,7 @@ class AdminTool extends ModuleManager
 									"SparkPlug", "CarBattery",
 									"CarRadiator", "EngineBelt",
 									"HeadlightH7", "HeadlightH7",
+									"HatchbackWheel",
 								};
 
 								for(int cs = 0; cs < carParts.Count(); cs++)

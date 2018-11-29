@@ -117,7 +117,7 @@ class AdvancedLoadouts extends ModuleManager
 		{
 			for (j = 0; j < item.GetInventory().AttachmentCount(); j++)
 			{	
-				Class.CastTo(inventoryItem, item.GetInventory().GetAttachmentFromIndex(j))
+				Class.CastTo(inventoryItem, item.GetInventory().GetAttachmentFromIndex(j));
 				ret.Insert(inventoryItem.GetType());
 			}
 		}
@@ -608,7 +608,7 @@ class AdvancedLoadouts extends ModuleManager
 				{
 					if (GetGame().IsKindOf( Extras.Get(ii), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ii), "Ammunition_Base")) )
 					{
-						mag = player.GetHumanInventory().CreateInInventory(Extras.Get(ii));
+						Class.CastTo(mag, player.GetHumanInventory().CreateInInventory(Extras.Get(ii)));
 						MinQuantity = 2;
 						if (mag)
 						{
@@ -636,7 +636,7 @@ class AdvancedLoadouts extends ModuleManager
 				{
 					for (int iz = 0; iz < attachments.Count(); ++iz)
 					{
-						myAttachmentIB = itemAI.GetInventory().CreateAttachment( attachments.Get(iz) );
+						Class.CastTo(myAttachmentIB, itemAI.GetInventory().CreateAttachment( attachments.Get(iz) ));
 						if (PoweredOptics.Contains(attachments.Get(iz)))
 						{
 							myAttachmentIB.GetInventory().CreateInInventory( "Battery9V" );
@@ -650,7 +650,7 @@ class AdvancedLoadouts extends ModuleManager
 					{
 						if (GetGame().IsKindOf( Extras.Get(ip), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ip), "Ammunition_Base")) )
 						{
-							mag = player.GetInventory().CreateInInventory( Extras.Get(ip) );
+							Class.CastTo(mag, player.GetInventory().CreateInInventory( Extras.Get(ip) ));
 							player.SetQuickBarEntityShortcut(mag, 1, true);   //Puts the mag for the secondary on hotkey 2
 
 							MinQuantity = 2;
