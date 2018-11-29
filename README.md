@@ -16,24 +16,26 @@
 #### NOTE: The db folder contains NO MODDED features/changes, and is 100% vanilla; this is the same with other XML files.
 
 ## Step One:
-##### 	1. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
-##### 	2. Open the 'mpmissions' which is located inside of your server directory.
-##### 	3. Copy 'DayZSurvival.chernarusplus' into this location.
+1. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
+2. Open the 'mpmissions' which is located inside of your server directory.
+3. Copy 'DayZSurvival.chernarusplus' into this location.
 
 ## Step Two:
-##### 1. Back back to the servers main directory, and move the 'serverDZ.cfg' file into the folder you named in Step One.
-##### 2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
+1. Back back to the servers main directory, and move the 'serverDZ.cfg' file into the folder you named in Step One.
+2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
 
 ## Step Three:
-##### 1. Place the 'ModdedScripts' directory into your server's main directory.
+1. Place the 'ModdedScripts' directory into your server's main directory.
 
 ## Step Four:
-##### 1. Change your startup command line to:
+1. Change your startup command line to:
+
 ```bash
 -mod=ModdedScripts -config=FolderFromStepOne\serverDZ.cfg -profiles=FolderFromStepOne -name=myServerName -scrAllowFileWrite
 ```
-#### NOTE: The -name tag will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
-#### NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
+
+##### NOTE: The -name tag will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
+##### NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
 
 # ----Features----
 
@@ -43,24 +45,27 @@
 ### This feature allows the server to create loadouts for fresh spawns to spawn with.
 
 ## Enable/Disable Stamina
-### Add -DisableStamina to your startup commandline to enable, and remove it from your startup commandline.
+- Add -DisableStamina to your startup commandline to enable, and remove it from your startup commandline.
 
 ## Spawn Custom Buildings
-### This feature allows the server owner to place CustomBuildings by minimalizing the amount of code needed to spawn in additional buildings.
+- This feature allows the server owner to place CustomBuildings by minimalizing the amount of code needed to spawn in additional buildings.
 
 ## Chatbased Admin Tools
-### This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg.
-### An admin can login by typing the following into DayZ's chat system:
+- This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg.
+
+#### An admin can login by typing the following into DayZ's chat system:
 ```
 #login mypassword
 ```
+
 ## Player Score/Kill Activity Tracker
-### This feature creates two files into the servers profile, and stores detailed kill information and player stats such as total deaths, and kills.
+- This feature creates two files into the servers profile, and stores detailed kill information and player stats such as total deaths, and kills.
+
 ## Chatbased Kill Messages
-### Sends chat messages showing who killed who, and who committed suicide.
+- Sends chat messages showing who killed who, and who committed suicide.
 
 ### USEFUL THINGS:
-#### How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
+- How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
 
 ## CREDITS:
-### @Sen ( @zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
+- @Sen ( @zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
