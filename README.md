@@ -38,6 +38,7 @@
 ```
 
 NOTE: The -name tag will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
+
 NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
 
 # Configuration:
