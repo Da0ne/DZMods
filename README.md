@@ -40,9 +40,10 @@
 ##### NOTE: The -name tag will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
 ##### NOTE: If you forget -scrAllowFileWrite than the server save your custom loadouts.
 
-# Features:
+# Configuration:
+- In order to turn on, or off different functionality, check the top of '/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c
 
-## -Enable/Disable player Join/leave messages. Check the file "Settings.C"
+# Features:
 
 ## Custom Spawn lodaouts.
 - This feature allows the server to create loadouts for fresh spawns to spawn with.
