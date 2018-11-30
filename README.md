@@ -45,7 +45,7 @@ HowToUse:  Login as admin, type the command /savePoint followed by a name you wi
 1. Move your server config file ```serverDZ.cfg``` file into the folder you named in Step One.
 2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
 3. Place the folder ```@VanillaPlusPlus``` into your server's main directory. 
-4. ### Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from HERE
+4. ### Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from [HERE](https://steamcommunity.com/sharedfiles/filedetails/?id=1559212036)
 
 ### Step Three:
 1. Change your startup command line to include:
