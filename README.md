@@ -4,7 +4,7 @@
 ## Update: December 1st 2018
 #### Version 0.4 is FINALLY HERE! Client SUPPORT! yeeet..Eskidddit...ok enough of that.
 #### WORKSHOP SUPPORT FINALLY! 
-#### This GitHub post will include Client + Server Files however you won't be able to edit the client side of things...due to it being a signed PBO, thus all players on your server need to subscribe to the mod on steam via this [link] 
+#### This GitHub post will include Client + Server Files however you won't be able to edit the client side of things...due to it being a signed PBO, thus all players on your server need to subscribe to the mod on steam via this [Vanilla++ Client Files]](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068) 
 
 ## NOTE: PLEASE GO THRU THE SETUP STEPS BEFORE YOU OPEN AN ISSUE!
 
