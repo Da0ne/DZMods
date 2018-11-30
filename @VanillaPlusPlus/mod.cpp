@@ -1,8 +1,8 @@
 class CfgMods
 {
-	class VanillaPP
+	class VanillaPlusPlus
 	{
-	    dir = "VanillaPP";
+	    dir = "VanillaPlusPlus";
 	    picture = "";
 	    action = "";
 	    hideName = 1;
