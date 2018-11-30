@@ -1,13 +1,1 @@
 platecarriercomplete
-platecarriercomplete2
-smershvest
-ballisticvest
-pressvest_blue
-pressvest_lightblue
-ukassvest_black
-ukassvest_camo
-ukassvest_khaki
-ukassvest_olive
-policevest
-highcapacityvest_black
-highcapacityvest_olive
