@@ -1,13 +1,13 @@
 class AdvancedLoadouts extends ModuleManager
-{	
+{
 	//=============Mod Tunables=============
-	protected bool m_StaticLoadouts     = true;  //TO USE U MUST HAVE --> AdvancedLoadouts mod active! (picks random loadout preset you have created using the admin command /export )
-	protected bool m_RandomizedLoadouts = false; //TO USE U MUST HAVE --> AdvancedLoadouts mod active! (picks random item to spawn on player from each catagory in 'LoaOuts\RandomlyGenerated')
+	protected bool m_StaticLoadouts     = true;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (picks random loadout preset you have created using the admin command /export )
+	protected bool m_RandomizedLoadouts = false;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (picks random item to spawn on player from each catagory in 'LoaOuts\RandomlyGenerated')
 	protected bool m_SpawnArmed		    = true;  //Spawn fresh spawns with a pistol, weapon types can be changed in 'DayZSurvival.c' All the way at the bottom in fucntion 'StartingEquipSetup'
 	//======================================
 
 	string m_RandomLoadoutsPath = "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\LoadOuts\\RandomlyGenerated\\";
-	ref TStringArray LoadoutCatagories = {"Bags","Gloves","Vests","Tops","Pants","Boots","HeadGear"}; //Add any new catagories here, make sure the name matches everywhere used including file
+	ref TStringArray LoadoutCatagories = {"Bags","Gloves","Vests","Tops","Pants","Boots","HeadGear","Face"}; //Add any new catagories here, make sure the name matches everywhere used including file
 	ref map<string,string> PoweredOptics; //Type of optics, type of battery
 
 	ref TStringArray Bags = {};
@@ -17,15 +17,124 @@ class AdvancedLoadouts extends ModuleManager
 	ref TStringArray Pants = {};
 	ref TStringArray Boots = {};
 	ref TStringArray HeadGear = {};
+	ref TStringArray Face = {};
 
 	void AdvancedLoadouts( DayZSurvival serverMission )
 	{
+		GetRPCManager().AddRPC( "RPC_GetLoadouts", "GetLoadouts", this, SingeplayerExecutionType.Server );
+		GetRPCManager().AddRPC( "RPC_CheckStaticLoadouts", "CheckStaticLoadouts", this, SingeplayerExecutionType.Server );
 
+		//Make Defualt LD is none exist
+		array<string> DefualtItems = new array<string>;
+		array<string> LoadoutDirectorys = new array<string>;
+		FindFileHandle FileSearch;
+		FileHandle LoadOutDir;
+		string MainDirectoy = "$profile:Static_Loadouts";
+
+		DefualtItems.Insert("Rag");
+		DefualtItems.Insert("jeans_black");
+		DefualtItems.Insert("tshirt_black");
+		DefualtItems.Insert("athleticshoes_black");
+
+		//Search and compile loadouts
+		string FolderName;
+		int 	file_attr;
+		int		flags;
+
+		if (FileExist(MainDirectoy))
+		{
+			string m_Path = "$profile:/Static_Loadouts";
+			string path_find_pattern = m_Path + "/*";
+
+			FileSearch = FindFile(path_find_pattern, FolderName, file_attr, flags);
+
+			bool found = true;
+			while (found)
+			{
+				if ( file_attr & FileAttr.DIRECTORY )
+				{
+					LoadoutDirectorys.Insert(FolderName);
+				}
+				
+				found = FindNextFile(FileSearch, FolderName, file_attr);
+			}
+			if (LoadoutDirectorys.Count() <= 0)
+			{
+				ExportInventoryByClassName(DefualtItems);
+			}
+			CloseFindFile(FileSearch);
+		}
+		else
+		{
+			ExportInventoryByClassName(DefualtItems);
+		}
 	}
 
 	void ~AdvancedLoadouts()
 	{
 
+	}
+	
+	override void onUpdate(float timeslice)
+	{
+		
+	}
+
+	void GetLoadouts( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
+	{
+		ref Param1<string> data;
+		if (!ctx.Read( data )) return;
+
+		if (type == CallType.Server)
+        {
+        	ctx.Read( data );
+			ref Param1< ref map<string, TStringArray> > map_param;
+			ref map<string, TStringArray> m_LootMap = new map<string, TStringArray>;
+			//Construct map
+			if (Bags.Count() == 0)
+			{
+				Bags.Insert("null");
+				m_LootMap.Insert("Bags",Bags);
+			}else { m_LootMap.Insert("Bags",Bags); }
+			if (Gloves.Count() == 0)
+			{
+				Gloves.Insert("null");
+				m_LootMap.Insert("Gloves",Gloves);
+			}else { m_LootMap.Insert("Gloves",Gloves); }
+			if (Vests.Count() == 0)
+			{
+				Vests.Insert("null");
+				m_LootMap.Insert("Vests",Vests);
+			}else { m_LootMap.Insert("Vests",Vests); }
+			if (Tops.Count() == 0)
+			{
+				Tops.Insert("null");
+				m_LootMap.Insert("Tops",Tops);
+			}else { m_LootMap.Insert("Tops",Tops); }
+			if (Pants.Count() == 0)
+			{
+				Pants.Insert("null");
+				m_LootMap.Insert("Pants",Pants);
+			}else { m_LootMap.Insert("Pants",Pants); }
+			if (Boots.Count() == 0)
+			{
+				Boots.Insert("null");
+				m_LootMap.Insert("Boots",Boots);
+			}else { m_LootMap.Insert("Boots",Boots); }
+			if (HeadGear.Count() == 0)
+			{
+				HeadGear.Insert("null");
+				m_LootMap.Insert("HeadGear",HeadGear);
+			}else { m_LootMap.Insert("HeadGear",HeadGear); }
+			if (Face.Count() == 0)
+			{
+				Face.Insert("null");
+				m_LootMap.Insert("Face",Face);
+			}else { m_LootMap.Insert("Face",Face); }
+
+			map_param = new Param1< ref map<string, TStringArray>>(m_LootMap);
+			GetRPCManager().SendRPC( "RPC_ItemsHandle", "ItemsHandle", map_param, true, sender );
+		}
 	}
 
 	bool CheckTunables(string type)
@@ -76,8 +185,9 @@ class AdvancedLoadouts extends ModuleManager
 	array<string> ConstructCargoArray(ItemBase SentItem)
 	{
 		//Gets cargo within cargo as well
-		InventoryItem item;
 		array<string> ret = new array<string>;
+		InventoryItem item;
+		InventoryItemBase SubinventoryItem;
 		Class.CastTo(item, SentItem);
 	
 		if (!item) return NULL;
@@ -90,24 +200,25 @@ class AdvancedLoadouts extends ModuleManager
 				InventoryItemBase inventoryItem;
 				Class.CastTo(inventoryItem, cargo.GetItem(j));
 				ret.Insert(inventoryItem.GetType());
-				
-				CargoBase Subcargo = inventoryItem.GetInventory().GetCargo();
-				if (Subcargo) //Check for Cargo within cargo
+
+				if (inventoryItem.GetInventory().GetCargo()) //Check for Cargo within cargo
 				{
+					CargoBase Subcargo = inventoryItem.GetInventory().GetCargo();
 					for (j = 0; j < Subcargo.GetItemCount(); ++j)
 					{
-						InventoryItemBase cargoItem;
-						Class.CastTo(cargoItem, Subcargo.GetItem(j));
-						ret.Insert(cargoItem.GetType());
+						SubinventoryItem = Subcargo.GetItem(j);
+						ret.Insert(SubinventoryItem.GetType());
 					}
 				}
 				else
 				{
-					if (inventoryItem.GetInventory().AttachmentCount())
+					if (SubinventoryItem != NULL && SubinventoryItem.GetInventory().AttachmentCount())
 					{
-						for (j = 0; j < inventoryItem.GetInventory().AttachmentCount(); ++j)
+						for (j = 0; j < SubinventoryItem.GetInventory().AttachmentCount(); ++j)
 						{
-							ret.Insert(inventoryItem.GetInventory().GetAttachmentFromIndex(j).GetType());
+							InventoryItemBase SubAtt;
+							Class.CastTo(SubAtt, SubinventoryItem);
+							ret.Insert(SubAtt.GetInventory().GetAttachmentFromIndex(j).GetType());
 						}
 					}
 				}
@@ -116,7 +227,7 @@ class AdvancedLoadouts extends ModuleManager
 		else
 		{
 			for (j = 0; j < item.GetInventory().AttachmentCount(); j++)
-			{	
+			{
 				Class.CastTo(inventoryItem, item.GetInventory().GetAttachmentFromIndex(j));
 				ret.Insert(inventoryItem.GetType());
 			}
@@ -125,28 +236,46 @@ class AdvancedLoadouts extends ModuleManager
 		return ret;
 	}
 
-	void ExportInventory(PlayerBase player)
-    {    
-        ItemBase Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet;
+	void RemoveDummyPlayer(PlayerBase m_DummyUnit)
+	{
+		m_DummyUnit.SetHealth(0);
+		GetGame().ObjectDelete(m_DummyUnit);
+	}
 
-        Class.CastTo(Hands, player.GetHumanInventory().GetEntityInHands());
-        Class.CastTo(Shoulder, player.GetHumanInventory().FindAttachment(InventorySlots.SHOULDER));
-        Class.CastTo(Melee, player.GetHumanInventory().FindAttachment(InventorySlots.MELEE));
-        Class.CastTo(HeadGear, player.GetHumanInventory().FindAttachment(InventorySlots.HEADGEAR));
-        Class.CastTo(Mask, player.GetHumanInventory().FindAttachment(InventorySlots.MASK));
-        Class.CastTo(EyeWear, player.GetHumanInventory().FindAttachment(InventorySlots.EYEWEAR));
-        Class.CastTo(Gloves, player.GetHumanInventory().FindAttachment(InventorySlots.GLOVES));
-        Class.CastTo(Armband, player.GetHumanInventory().FindAttachment(InventorySlots.ARMBAND));
-        Class.CastTo(Body, player.GetHumanInventory().FindAttachment(InventorySlots.BODY));
-        Class.CastTo(Vest, player.GetHumanInventory().FindAttachment(InventorySlots.VEST));
-        Class.CastTo(Back, player.GetHumanInventory().FindAttachment(InventorySlots.BACK));
-        Class.CastTo(Legs, player.GetHumanInventory().FindAttachment(InventorySlots.LEGS));
-        Class.CastTo(Feet, player.GetHumanInventory().FindAttachment(InventorySlots.FEET));
+	void ExportInventoryByClassName(ref array<string> ItemsArray)
+	{
+		PlayerBase m_DummyUnit;
+		m_DummyUnit = PlayerBase.Cast(  GetGame().CreateObject( "SurvivorM_Mirek", "0 0 0", false) );
+	    for (int i = 0; i < ItemsArray.Count(); ++i)
+	    {
+	    	m_DummyUnit.GetHumanInventory().CreateInInventory( ItemsArray.Get(i) );
+	    }
+	    ExportInventory(m_DummyUnit,"Defualt Loadout");
+	    GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.RemoveDummyPlayer, 3000, false,m_DummyUnit); 
+	}
 
-        ExportToJSON(Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet);
-    }
+	void ExportInventory(PlayerBase player,string PresetName)
+	{
+		ItemBase Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet;
 
-	void ExportToJSON(ItemBase Hands, ItemBase Shoulder, ItemBase Melee ,ItemBase HeadGear,ItemBase Mask,ItemBase EyeWear,ItemBase Gloves,ItemBase Armband,ItemBase Body,ItemBase Vest,ItemBase Back,ItemBase Legs,ItemBase Feet)
+		Class.CastTo(Hands,player.GetHumanInventory().GetEntityInHands());
+		Class.CastTo(Shoulder,player.GetHumanInventory().FindAttachment(InventorySlots.SHOULDER));
+		Class.CastTo(Melee,player.GetHumanInventory().FindAttachment(InventorySlots.MELEE));
+		Class.CastTo(HeadGear,player.GetHumanInventory().FindAttachment(InventorySlots.HEADGEAR));
+		Class.CastTo(Mask,player.GetHumanInventory().FindAttachment(InventorySlots.MASK));
+		Class.CastTo(EyeWear,player.GetHumanInventory().FindAttachment(InventorySlots.EYEWEAR));
+		Class.CastTo(Gloves,player.GetHumanInventory().FindAttachment(InventorySlots.GLOVES));
+		Class.CastTo(Armband,player.GetHumanInventory().FindAttachment(InventorySlots.ARMBAND));
+		Class.CastTo(Body,player.GetHumanInventory().FindAttachment(InventorySlots.BODY));
+		Class.CastTo(Vest,player.GetHumanInventory().FindAttachment(InventorySlots.VEST));
+		Class.CastTo(Back,player.GetHumanInventory().FindAttachment(InventorySlots.BACK));
+		Class.CastTo(Legs,player.GetHumanInventory().FindAttachment(InventorySlots.LEGS));
+		Class.CastTo(Feet,player.GetHumanInventory().FindAttachment(InventorySlots.FEET));
+		
+		ExportToJSON(Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet,PresetName);
+	}
+
+	void ExportToJSON(ItemBase Hands, ItemBase Shoulder, ItemBase Melee ,ItemBase HeadGear,ItemBase Mask,ItemBase EyeWear,ItemBase Gloves,ItemBase Armband,ItemBase Body,ItemBase Vest,ItemBase Back,ItemBase Legs,ItemBase Feet,string PresetName)
 	{
 		ref array<string> ItemCargo;
 
@@ -155,76 +284,76 @@ class AdvancedLoadouts extends ModuleManager
 		if(Body)
 		{
 			ItemCargo 		= ConstructCargoArray(Body);
-			WriteToJSON(folderKey,"Body",Body,ItemCargo);
+			WriteToJSON(folderKey,"Body",Body,ItemCargo,PresetName);
 		}
 		if (Hands)
 		{
 			ItemCargo 		= ConstructCargoArray(Hands);
-			WriteToJSON(folderKey,"Hands",Hands,ItemCargo);
+			WriteToJSON(folderKey,"Hands",Hands,ItemCargo,PresetName);
 		}
 		if(Melee)
 		{
 			ItemCargo 		= ConstructCargoArray(Melee);
-			WriteToJSON(folderKey,"Melee",Melee,ItemCargo);
+			WriteToJSON(folderKey,"Melee",Melee,ItemCargo,PresetName);
 		}
 		if(Shoulder)
 		{
 			ItemCargo 		= ConstructCargoArray(Shoulder);
-			WriteToJSON(folderKey,"Shoulder",Shoulder,ItemCargo);
+			WriteToJSON(folderKey,"Shoulder",Shoulder,ItemCargo,PresetName);
 		}
 		if(HeadGear)
 		{
 			ItemCargo 		= ConstructCargoArray(HeadGear);
-			WriteToJSON(folderKey,"HeadGear",HeadGear,ItemCargo);
+			WriteToJSON(folderKey,"HeadGear",HeadGear,ItemCargo,PresetName);
 		}
 		if(Mask)
 		{
 			ItemCargo 		= ConstructCargoArray(Mask);
-			WriteToJSON(folderKey,"Mask",Mask,ItemCargo);
+			WriteToJSON(folderKey,"Mask",Mask,ItemCargo,PresetName);
 		}
 		if(EyeWear)
 		{
 			ItemCargo 		= ConstructCargoArray(EyeWear);
-			WriteToJSON(folderKey,"EyeWear",EyeWear,ItemCargo);
+			WriteToJSON(folderKey,"EyeWear",EyeWear,ItemCargo,PresetName);
 		}
 		if(Gloves)
 		{
 			ItemCargo 		= ConstructCargoArray(Gloves);
-			WriteToJSON(folderKey,"Gloves",Gloves,ItemCargo);
+			WriteToJSON(folderKey,"Gloves",Gloves,ItemCargo,PresetName);
 		}
 		if(Armband)
 		{
 			ItemCargo 		= ConstructCargoArray(Armband);
-			WriteToJSON(folderKey,"Armband",Armband,ItemCargo);
+			WriteToJSON(folderKey,"Armband",Armband,ItemCargo,PresetName);
 		}
 		if(Vest)
 		{
 			ItemCargo 		= ConstructCargoArray(Vest);
-			WriteToJSON(folderKey,"Vest",Vest,ItemCargo);
+			WriteToJSON(folderKey,"Vest",Vest,ItemCargo,PresetName);
 		}
 		if(Back)
 		{
 			ItemCargo 		= ConstructCargoArray(Back);
-			WriteToJSON(folderKey,"Back",Back,ItemCargo);
+			WriteToJSON(folderKey,"Back",Back,ItemCargo,PresetName);
 		}
 		if(Legs)
 		{
 			ItemCargo 		= ConstructCargoArray(Legs);
-			WriteToJSON(folderKey,"Legs",Legs,ItemCargo);
+			WriteToJSON(folderKey,"Legs",Legs,ItemCargo,PresetName);
 		}
 		if(Feet)
 		{
 			ItemCargo 		= ConstructCargoArray(Feet);
-			WriteToJSON(folderKey,"Feet",Feet,ItemCargo);
+			WriteToJSON(folderKey,"Feet",Feet,ItemCargo,PresetName);
 		}
 	}
 
-	void WriteToJSON(int folderKey, string Catagory, ItemBase BaseItem, ref array<string> ItemCargo)
+	void WriteToJSON(int folderKey, string Catagory, ItemBase BaseItem, ref array<string> ItemCargo, string PresetName)
 	{
 		string static_dir  = "$profile:Static_Loadouts";
 		string file_dir    = "$profile:Static_Loadouts\\Loadout_"+ folderKey.ToString();
 		string file_path   =  file_dir + "\\" + Catagory;
-		
+		string dataJson;
 
 		ref array<string> attachments = new array<string>;
 		ref map<string, ref array<string>> ItemInSlotChildren = new map<string, ref array<string>>;
@@ -261,7 +390,7 @@ class AdvancedLoadouts extends ModuleManager
         }
         else
         {
-        	MakeDirectory("$profile:Static_Loadouts");
+        	MakeDirectory(static_dir);
         	if (FileExist(file_dir))
         	{
         		JsonFileLoader<map<string,map<string,map<string,map<string,map<string, ref array<string>>>>>>>.JsonSaveFile(file_path + ".json", SlotData);
@@ -272,8 +401,22 @@ class AdvancedLoadouts extends ModuleManager
         		JsonFileLoader<map<string,map<string,map<string,map<string,map<string, ref array<string>>>>>>>.JsonSaveFile(file_path + ".json", SlotData);
         	}
         }
+        SavePresetName(file_dir,PresetName);
+	}
 
-        Print("File " + file_path + " was writen by the use of the export command.");
+	void SavePresetName(string path, string presetName)
+	{
+		//Make Defualt LD is none exist
+		FindFileHandle FileSearch;
+		FileHandle LoadOutDir;
+		string LoadoutDirectoy = path + "\\PresetName.txt";
+
+		if (!FileExist(LoadoutDirectoy))
+		{
+			FileHandle currentFile = OpenFile(LoadoutDirectoy, FileMode.WRITE);
+			FPrintln(currentFile,presetName);
+			CloseFile(currentFile);
+		}
 	}
 
 	//=========================Import + Spwn Loadout Functions =================================
@@ -293,7 +436,7 @@ class AdvancedLoadouts extends ModuleManager
 		return count;
 	}
 
-	void SpawnLoadout(PlayerBase player, bool status, array<string> Directorys)
+	void SpawnLoadout(PlayerBase player, bool status, array<string> Directorys, bool Random)
 	{
 		ref map<string,map<string,map<string,map<string,map<string, TStringArray>>>>> SavedData = new map<string,map<string,map<string,map<string,map<string, TStringArray>>>>>;
 		
@@ -307,7 +450,15 @@ class AdvancedLoadouts extends ModuleManager
 
 		if (status)
 		{
-			string SelectedLoadout = Directorys.Get(GimmeRandom(Directorys.Count()));
+			string SelectedLoadout;
+			if (Random)
+			{
+				SelectedLoadout = Directorys.Get(GimmeRandom(Directorys.Count()));
+			}
+			else
+			{
+				SelectedLoadout = Directorys.Get(0);
+			}
 
 			TStringArray stSlots = {"Hands","Shoulder","Melee","HeadGear","Mask","EyeWear","Gloves","Armband","Body","Vest","Back","Legs","Feet"};
 			string CurentCatagory;
@@ -389,8 +540,7 @@ class AdvancedLoadouts extends ModuleManager
 					else
 					{
 						itemEnt = player.GetInventory().CreateInInventory( strClassName );
-						Class.CastTo(itemBs, itemEnt);
-
+						itemBs = ItemBase.Cast(itemEnt);
 						if (arrAttachments.Count() >= 1)
 						{
 							for (j = 0; j < arrAttachments.Count(); ++j)
@@ -427,10 +577,20 @@ class AdvancedLoadouts extends ModuleManager
 			EntityAI ShitBase;
 
 			ShitBase = player.GetInventory().CreateInInventory( "Rag" );
-			Class.CastTo(TrashBase, ShitBase);							
+			TrashBase = ItemBase.Cast(ShitBase);							
 			TrashBase.SetQuantity(1);
 			Print("StartingEquipSetup>>ERROR:: No Static Custom Loadouts were found!");
 	    }
+	}
+
+	void SpawnStaticLoadout(string LoadOutName, string UID)
+	{
+		PlayerBase player;
+		player = PlayerBase.Cast(m_MissionServer.GetPlayerByUID(UID));
+		ref array<string> TmP = new array<string>;
+		TmP.Insert(GetDirByName(LoadOutName));
+
+		SpawnLoadout(player,true,TmP,false);
 	}
 			
 	bool LoadRandomStaticLD(PlayerBase player)
@@ -447,8 +607,8 @@ class AdvancedLoadouts extends ModuleManager
 
 		if (FileExist(MainDirectoy))
 		{
-			string m_Path = "$profile:\\Static_Loadouts";
-			string path_find_pattern = m_Path + "\\*";
+			string m_Path = "$profile:/Static_Loadouts";
+			string path_find_pattern = m_Path + "/*";
 
 			FileSearch = FindFile(path_find_pattern, FolderName, file_attr, flags);
 
@@ -469,12 +629,12 @@ class AdvancedLoadouts extends ModuleManager
 		if (LoadoutDirectorys.Count() >= 1)
 		{
 			player.RemoveAllItems();
-			SpawnLoadout(player,true,LoadoutDirectorys);
+			SpawnLoadout(player,true,LoadoutDirectorys,false);
 			return true;
 		}
 		else
 		{
-			SpawnLoadout(player,false,LoadoutDirectorys);
+			SpawnLoadout(player,false,LoadoutDirectorys,false);
 			return false;
 		}
 	}
@@ -482,6 +642,7 @@ class AdvancedLoadouts extends ModuleManager
 	void LoadRndGenLoadout(PlayerBase player)
 	{
 		ItemBase itemBs;
+		ItemBase PantsItem;
 		EntityAI itemEnt;
 		player.RemoveAllItems();
 
@@ -489,19 +650,184 @@ class AdvancedLoadouts extends ModuleManager
 		if (Gloves.Count() > 0) { player.GetInventory().CreateInInventory( Gloves.GetRandomElement() ); }
 		if (Vests.Count() > 0) { player.GetInventory().CreateInInventory( Vests.GetRandomElement() ); }
 		if (Tops.Count() > 0) { player.GetInventory().CreateInInventory( Tops.GetRandomElement() ); }
-		if (Pants.Count() > 0) { player.GetInventory().CreateInInventory( Pants.GetRandomElement() ); }
+		if (Pants.Count() > 0) { PantsItem = ItemBase.Cast(player.GetInventory().CreateInInventory( Pants.GetRandomElement()) ); }
 		if (Boots.Count() > 0) { player.GetInventory().CreateInInventory( Boots.GetRandomElement() ); }
 		if (HeadGear.Count() > 0) { player.GetInventory().CreateInInventory( HeadGear.GetRandomElement() ); }
 
 		player.GetInventory().CreateInInventory( "Battery9V" );
 		
-		itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-		Class.CastTo(itemBs, itemEnt);
+		itemEnt = EntityAI.Cast(PantsItem.GetInventory().CreateInInventory( "Rag" ));
+		itemBs = ItemBase.Cast(itemEnt);
 		itemBs.SetQuantity(6);
 
 		player.SetQuickBarEntityShortcut(itemBs, 0, true);
 	}
 
+	string GetDirByName(string LoadoutName)
+	{
+		string path = "null";
+
+		array<string> LoadoutDirectorys = new array<string>;
+		FindFileHandle FileSearch;
+		FileHandle LoadOutDir;
+		string MainDirectoy = "$profile:Static_Loadouts";
+
+		//Search and compile loadouts
+		string FolderName;
+		int 	file_attr;
+		int		flags;
+
+		if (FileExist(MainDirectoy))
+		{
+			string m_Path = "$profile:/Static_Loadouts";
+			string path_find_pattern = m_Path + "/*";
+
+			FileSearch = FindFile(path_find_pattern, FolderName, file_attr, flags);
+
+			bool found = true;
+			while (found)
+			{
+				if ( file_attr & FileAttr.DIRECTORY )
+				{
+					LoadoutDirectorys.Insert(FolderName);
+					Print("GetDirByName FolderFound: "+FolderName);
+				}
+				
+				found = FindNextFile(FileSearch, FolderName, file_attr);
+			}
+			CloseFindFile(FileSearch);
+
+		 	for (int i = 0; i < LoadoutDirectorys.Count(); ++i)
+		    {
+				FileHandle currentFile = OpenFile("$profile:Static_Loadouts\\" + LoadoutDirectorys.Get(i) + "\\" + "PresetName.txt", FileMode.READ);
+				if (currentFile != 0)
+				{
+					string line_content = "";
+					while ( FGets(currentFile,line_content) > 0 )
+					{
+						if (line_content == LoadoutName)
+						{
+							path = LoadoutDirectorys.Get(i);
+						}
+					}
+					CloseFile(currentFile);
+				}
+			}
+		}
+		return path;
+	}
+
+	//Only pulls basic items, does not include attachments of loadout. Items only used for client preview area.
+	void CheckStaticLoadouts( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
+	{
+		Param1< string > data;
+        if ( !ctx.Read( data ) ) return;
+
+        if (type == CallType.Server)
+        {
+			array<string> LoadoutDirectorys = new array<string>;
+			FindFileHandle FileSearch;
+			FileHandle LoadOutDir;
+			string MainDirectoy = "$profile:Static_Loadouts";
+
+			//Search and compile loadouts
+			string FolderName;
+			int 	file_attr;
+			int		flags;
+
+			if (FileExist(MainDirectoy))
+			{
+				string m_Path = "$profile:/Static_Loadouts";
+				string path_find_pattern = m_Path + "/*";
+
+				FileSearch = FindFile(path_find_pattern, FolderName, file_attr, flags);
+
+				bool found = true;
+				while (found)
+				{
+					if ( file_attr & FileAttr.DIRECTORY )
+					{
+						LoadoutDirectorys.Insert(FolderName);
+						Print("Folder Found: "+FolderName);
+					}
+					
+					found = FindNextFile(FileSearch, FolderName, file_attr);
+				}
+				CloseFindFile(FileSearch);
+			}
+
+			if (LoadoutDirectorys.Count() >= 1)
+			{
+			    ref map<string,map<string,map<string,map<string,map<string, TStringArray>>>>> SavedData = new map<string,map<string,map<string,map<string,map<string, TStringArray>>>>>;
+				
+				ref map<string,map<string, TStringArray>> ItemInInentory = new map<string,map<string, TStringArray>>;
+			    ref map<string,map<string,map<string, TStringArray>>> ItemInSlot = new map<string,map<string,map<string, TStringArray>>>;
+				ref map<string,map<string,map<string,map<string, TStringArray>>>> ContainerObject = new map<string,map<string,map<string,map<string, TStringArray>>>>;
+
+				TStringArray stSlots = {"Hands","Shoulder","Melee","HeadGear","Mask","EyeWear","Gloves","Armband","Body","Vest","Back","Legs","Feet","PresetName"};
+				string CurrentSlot;
+				string LoadOutName;
+
+				ref array<string> ItemsArray = new array<string>;
+			    for (int i = 0; i < LoadoutDirectorys.Count(); ++i)
+			    {
+			    	for (int x = 0; x < stSlots.Count(); ++x)
+				    {
+				    	CurrentSlot = stSlots.Get(x);
+				    	string jsonSavePath = MainDirectoy + "\\" + LoadoutDirectorys.Get(i) + "\\" + CurrentSlot +".json";
+				    	if (CurrentSlot == "PresetName")
+				    	{
+				    		FileHandle currentFile = OpenFile("$profile:Static_Loadouts\\" + LoadoutDirectorys.Get(i) + "\\" + "PresetName.txt", FileMode.READ);
+							if (currentFile != 0)
+							{
+								string line_content = "";
+								while ( FGets(currentFile,line_content) > 0 )
+								{
+									LoadOutName = line_content;
+								}
+								CloseFile(currentFile);
+								Print("PresetName: "+LoadOutName);
+							}
+				    	}
+				    	else
+				    	{
+					    	if (FileExist(jsonSavePath))
+							{
+								Print("FileExist: "+jsonSavePath);
+							    JsonFileLoader<map<string,map<string,map<string,map<string,map<string, TStringArray>>>>>>.JsonLoadFile(jsonSavePath, SavedData);
+							   	
+							   	int Y = 0;
+								string mKey;
+								for (Y = 0; Y < SavedData.Count(); ++Y)
+								{
+									mKey    = SavedData.GetKey(Y);
+									ContainerObject = SavedData.Get(mKey);
+								}
+								for (Y = 0; Y < ContainerObject.Count(); ++Y)
+								{
+									mKey = ContainerObject.GetKey(Y);
+									ItemInSlot = ContainerObject.Get(mKey);
+								}
+								for (Y = 0; Y < ItemInSlot.Count(); ++Y)
+								{
+									mKey = ItemInSlot.GetKey(Y);
+									ItemInInentory = ItemInSlot.Get(mKey);
+								}
+						        for (int J = 0; J < ItemInInentory.Count(); ++J)
+						        {
+						        	string ClassName = ItemInInentory.GetKey(J);
+						        	ItemsArray.Insert(ClassName);
+						        }
+							}
+				    	}
+				    }
+				 Param3<string,ref array<string>,bool> send_Params = new Param3<string,ref array<string>,bool>(LoadOutName,ItemsArray,m_StaticLoadouts);
+    		     GetRPCManager().SendRPC( "RPC_LoadStaticLoadouts", "LoadStaticLoadouts", send_Params, true, sender );
+    		     ItemsArray.Clear();
+			    }
+			}
+	  	}
+	}
 	//==============================Misc=================================
 
 	void ConstructLoadouts(bool update)
@@ -509,17 +835,15 @@ class AdvancedLoadouts extends ModuleManager
 		FileHandle currentFile;
 		string line_content = "";
 
-		if (update) {
-			if (m_RandomizedLoadouts)
-			{
-				Bags.Clear();
-				Gloves.Clear();
-				Vests.Clear();
-				Tops.Clear();
-				Pants.Clear();
-				Boots.Clear();
-				HeadGear.Clear();
-			}
+		if (update && m_RandomizedLoadouts) {
+			Bags.Clear();
+			Gloves.Clear();
+			Vests.Clear();
+			Tops.Clear();
+			Pants.Clear();
+			Boots.Clear();
+			HeadGear.Clear();
+			Face.Clear();
 		}
 
 		if (m_RandomizedLoadouts)
@@ -563,10 +887,14 @@ class AdvancedLoadouts extends ModuleManager
 							case "HeadGear":
 							HeadGear.Insert(line_content);
 							break;
+
+							case "Face":
+							Face.Insert(line_content);
+							break;
 						}
 					}
 					CloseFile(currentFile);
-			    }
+			    } else { Print("Error Reading Randomized loadouts! File "+ currentCatagory +" Missing"); }
 			}
 		}
 	}
@@ -575,7 +903,7 @@ class AdvancedLoadouts extends ModuleManager
 	{
 		EntityAI itemAI;
 
-		EntityAI myAttachmentAI;
+		ItemBase myAttachmentAI;
 		EntityAI myAttachmentIB;
 
 		EntityAI ExtraEntity;
@@ -585,7 +913,7 @@ class AdvancedLoadouts extends ModuleManager
 
 		if (isMainGun)
 		{
-			itemAI = player.GetHumanInventory().CreateInHands( item );
+			itemAI = EntityAI.Cast(player.GetHumanInventory().CreateInHands( item ));
 
 			player.SetQuickBarEntityShortcut(itemAI, 2, true); //Puts gun on hotkey 3
 
@@ -594,7 +922,7 @@ class AdvancedLoadouts extends ModuleManager
 					
 				for (int i = 0; i < attachments.Count(); ++i)
 				{
-					myAttachmentAI = itemAI.GetInventory().CreateInInventory( attachments.Get(i) );
+					myAttachmentAI = ItemBase.Cast( itemAI.GetInventory().CreateInInventory( attachments.Get(i)) );
 					if (PoweredOptics.Contains(attachments.Get(i)))
 					{
 						myAttachmentAI.GetInventory().CreateInInventory( "Battery9V" );
@@ -608,7 +936,7 @@ class AdvancedLoadouts extends ModuleManager
 				{
 					if (GetGame().IsKindOf( Extras.Get(ii), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ii), "Ammunition_Base")) )
 					{
-						Class.CastTo(mag, player.GetHumanInventory().CreateInInventory(Extras.Get(ii)));
+						Class.CastTo(mag,player.GetHumanInventory().CreateInInventory(Extras.Get(ii)));
 						MinQuantity = 2;
 						if (mag)
 						{
@@ -618,7 +946,7 @@ class AdvancedLoadouts extends ModuleManager
 					}
 					else
 					{
-						ExtraEntity = player.GetInventory().CreateInInventory( Extras.Get(ii) );
+						ExtraEntity = EntityAI.Cast(player.GetInventory().CreateInInventory( Extras.Get(ii) ));
 					}
 				}
 			}
@@ -628,15 +956,14 @@ class AdvancedLoadouts extends ModuleManager
 			//For Pistols/Secondary that spawn in inevntory
 			if ( item != "" ) 
 			{
-				itemAI = player.GetHumanInventory().CreateInInventory( item );
-
+				itemAI = EntityAI.Cast( player.GetHumanInventory().CreateInInventory( item ) );
 				player.SetQuickBarEntityShortcut(itemAI, 3, true);  //Puts the Secondary weapon on hotkey 4
 			
 				if ( attachments != NULL && attachments.Count() > 0 )
 				{
 					for (int iz = 0; iz < attachments.Count(); ++iz)
 					{
-						Class.CastTo(myAttachmentIB, itemAI.GetInventory().CreateAttachment( attachments.Get(iz) ));
+						myAttachmentIB = EntityAI.Cast(itemAI.GetInventory().CreateAttachment( attachments.Get(iz) ));
 						if (PoweredOptics.Contains(attachments.Get(iz)))
 						{
 							myAttachmentIB.GetInventory().CreateInInventory( "Battery9V" );
@@ -650,7 +977,7 @@ class AdvancedLoadouts extends ModuleManager
 					{
 						if (GetGame().IsKindOf( Extras.Get(ip), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ip), "Ammunition_Base")) )
 						{
-							Class.CastTo(mag, player.GetInventory().CreateInInventory( Extras.Get(ip) ));
+							Class.CastTo(mag,player.GetInventory().CreateInInventory( Extras.Get(ip) ));
 							player.SetQuickBarEntityShortcut(mag, 1, true);   //Puts the mag for the secondary on hotkey 2
 
 							MinQuantity = 2;
@@ -658,7 +985,7 @@ class AdvancedLoadouts extends ModuleManager
 						}
 						else
 						{
-							ExtraEntity = player.GetInventory().CreateInInventory( Extras.Get(ip) );
+							ExtraEntity = EntityAI.Cast(player.GetInventory().CreateInInventory( Extras.Get(ip) ));
 						}
 					}
 				}

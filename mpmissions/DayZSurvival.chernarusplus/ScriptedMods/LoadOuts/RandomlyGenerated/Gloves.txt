@@ -1,8 +1,1 @@
-workinggloves_black
-workinggloves_beige
-workinggloves_brown
-workinggloves_yellow
-tacticalgloves_black
-tacticalgloves_beige
-tacticalgloves_green
-nbcglovesgray
+WorkingGloves_Yellow

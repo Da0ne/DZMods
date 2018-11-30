@@ -30,7 +30,6 @@ class BuildingSpawner extends ModuleManager
 			Print("BuildingSpawner::spawnCustomBuildings: buildings Array is Empty.");
 			return;
 		}
-		EntityAI buildAI;
 
 		for(int i = 0; i < customBuildings.Count(); i++)
 		{

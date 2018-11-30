@@ -5,16 +5,16 @@ class ModTunables extends ModuleManager
 {
 	//============Mods============
 	protected bool m_AdminTool         = true;   //Set to 'true' to enable admin tools
-	protected bool m_AdvancedLoadouts  = true;	 //Set to true to Spawn Players with custom loadouts, set false to spawn with Vanilla DayZ gear ( check 'AdvancedLoadouts.c' for more settings )
+	protected bool m_AdvancedLoadouts  = true;	 //DONT SET THIS TO FALSE! v0.4...Does not Support Vanilla Loadouts yet. -DaOne
 	protected bool m_InfectedHordes	   = true;   //Random zombie hordes that spawn on the map (The tunables for this mod can be found in 'InfectedHordes.c')
 	protected bool m_SafeZone		   = true;   //set 'true' to Enable Safe Zone
+	protected bool m_CustomBuildings   = true;  //Custom Placed Buildings, check the very bottom of this file on how to add a building to spawn on your server.
 	//============================
 
 	//==============Misc==========
 	protected bool m_Debugmode 		   = false; //Set true to disable db for faster server loading and for testing purposes
 	protected bool m_ProxyExportMode   = false; //Set to ture to export a new loot positions xml (export can be found in your Storage folder).
 	protected bool m_StaminaStatus     = true;  //set to true to disable Stamina
-	protected bool m_CustomBuildings   = true;  //Spawns the buildings you add in file BuildingSpawner.c
 	protected bool m_SessionFeed	   = true;  //Set to true to enable Disconnect/Connect Messages
 	//============================
 	
@@ -70,15 +70,16 @@ class ModTunables extends ModuleManager
 			case "SafeZone":
 			return m_SafeZone;
 			break;
-
+			
 			case "CustomBuildings":
 			return m_CustomBuildings;
 			break;
 		}
 		return false;
 	}
-
-	CustomBuildings getBuildingList(){
+	
+	CustomBuildings getBuildingList()
+	{
 		return {
 			//Add new more SpawnedBuilding here.
 			//new SpawnedBuilding(string buildingName, string location, string orientation),

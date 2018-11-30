@@ -11,7 +11,9 @@ class SpawnedBuilding
 		this.orientation = orientation;
 	}
 
-	void ~SpawnedBuilding(){
+	void ~SpawnedBuilding()
+	{
+		
 	}
 
 	string getName()

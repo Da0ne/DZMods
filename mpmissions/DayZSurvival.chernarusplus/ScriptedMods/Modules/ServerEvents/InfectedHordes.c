@@ -3,13 +3,13 @@ class InfectedHordes
 	ref map<string, vector> m_HordePositions = new map<string, vector>;
 
 	string m_NewHordeMsg 	  = "A New Horde of Zombies Showed up Around: ";
-	string m_LastSeenHordeMsg = "The Horde of Zombies Was Last Seen Around: ";
+	string m_LastSeenMsg      = "The Horde of Zombies Was Last Seen Around: ";
 
 	int CURRENT_STAMP;
 	int CURRENT_STAMP_MSG;
 	int MESSAGE_INTERVAL     = 300000;   //in ms time between each message 300000
 	int COOL_DOWN_INTERVAL   = 1800000;  //In ms the time between each event
-	int UPDATE_INTERVAL      = 5000;   //In ms the time between each update ( don't change unless you know what you are doing :) )
+	int UPDATE_INTERVAL      = 5000;    //In ms the time between each update ( don't change unless you know what you are doing :) )
 	int INT_MAX_ZOMBIES      = 125;     //Maximum amount of zombies
 	int INT_MIN_ZOMBIES      = 65;      //Minimum amount of zombies
 
@@ -65,6 +65,7 @@ class InfectedHordes
 
         return tmp_pos;
     }
+	
 	void SpawnHorde()
 	{
 		m_EventOnGoing = true;
@@ -82,8 +83,8 @@ class InfectedHordes
 						
 				vector pos = SnapToGround(Vector(m_CurrentZonePos[0] + rndX, m_CurrentZonePos[1], m_CurrentZonePos[2] + rndY));
 				string zmbClass = ZombieClasses.GetRandomElement();
-				EntityAI AIzmb;
-				Class.CastTo(AIzmb, GetGame().CreateObject( zmbClass, pos, false, true ));
+
+				EntityAI AIzmb = GetGame().CreateObject( zmbClass, pos, false, true );
 				ref ZombieBase Bszmb;
 				Class.CastTo(Bszmb,AIzmb);
 				Bszmb.AttachEventHandle(PossibleLootDrops,PossibleWeaponDrops,dropChance);
@@ -155,7 +156,7 @@ class InfectedHordes
 			//Do Message
 			if (m_EventOnGoing)
 			{
-				message = m_LastSeenHordeMsg + m_CurrentZone;
+				message = m_LastSeenMsg + m_CurrentZone;
 				GlobalNotifier("inform",message);
 			}
 			CURRENT_STAMP_MSG = GetGame().GetTime();

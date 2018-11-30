@@ -16,7 +16,7 @@ class AdminTool extends ModuleManager
 	protected string GUID;
 	
 	protected string m_AdminListPath = "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\";
-	
+
 	override void Init()
 	{
 		Print("AdminTool:: Init():: Loading AdminTool Mods...");
@@ -24,7 +24,6 @@ class AdminTool extends ModuleManager
 		m_AdminList    = new map<string, string>; //UID, name
 		m_TPLocations  = new map<string, vector>; //name of town, pos
 		m_ExtendedCommands = new map<string,int>; //Command, length
-
 
 		//-----Add Admins from txt-----
 		FileHandle AdminUIDSFile = OpenFile(m_AdminListPath + "Admins.txt",FileMode.READ);
@@ -37,6 +36,9 @@ class AdminTool extends ModuleManager
 				Print("Adding Admin: "+ line_content + " To the Admin List!");
 			}
 			CloseFile(AdminUIDSFile);
+		}
+		else {
+		Print("Error Loading Admin GUIDS! File Missing");
 		}
 		
 		//Add Towns to TP array
@@ -73,14 +75,14 @@ class AdminTool extends ModuleManager
 
 		//Init Commands
 		m_ExtendedCommands.Insert("/strip",6);
-		m_ExtendedCommands.Insert("/tpm",5);
+		m_ExtendedCommands.Insert("/tpm",4);
 		m_ExtendedCommands.Insert("/tpp",4);
 		m_ExtendedCommands.Insert("/tpto",5);
 		m_ExtendedCommands.Insert("/spi",4);
 		m_ExtendedCommands.Insert("/spg",4);
 		m_ExtendedCommands.Insert("/tpc",4);
 		//Sub commands
-		m_ExtendedCommands.Insert("/export",1);
+		m_ExtendedCommands.Insert("/export",7);
 		m_ExtendedCommands.Insert("/ammo",1);
 		m_ExtendedCommands.Insert("/stamina",1);
 		m_ExtendedCommands.Insert("/LoadoutType",1);
@@ -97,6 +99,8 @@ class AdminTool extends ModuleManager
 		m_ExtendedCommands.Insert("/tpalltome",1);
 		m_ExtendedCommands.Insert("/killall",1);
 		m_ExtendedCommands.Insert("/spawncar",1);
+		m_ExtendedCommands.Insert("/savePoint",10);
+		m_ExtendedCommands.Insert("/refuel",1);
 	}
 	
 	void AdminTool( DayZSurvival missionServer )
@@ -105,6 +109,11 @@ class AdminTool extends ModuleManager
 	}
 	
 	void ~AdminTool()
+	{
+		
+	}
+	
+	override void onUpdate(float timeslice)
 	{
 		
 	}
@@ -119,8 +128,7 @@ class AdminTool extends ModuleManager
 
 		for ( int i = 0; i < players.Count(); ++i )
 		{
-			PlayerBase Target;
-			Class.CastTo(Target, players.Get(i));
+			PlayerBase Target = players.Get(i);
 			Target.SetPosition( AdminPos );
 		}
 		return i;
@@ -129,7 +137,7 @@ class AdminTool extends ModuleManager
 	void oSpawnItemFunc(bool ground, PlayerBase player, string ClassName)
 	{
 		EntityAI item;
-		ItemBase itemBs;
+		ItemBase itemBs
 
 		vector NewPosition;
 		vector OldPosition;
@@ -142,11 +150,11 @@ class AdminTool extends ModuleManager
 			NewPosition[1] = OldPosition[1] + 0.1;
 			NewPosition[2] = OldPosition[2] + 1.5;
 
-			Class.CastTo(item, GetGame().CreateObject( ClassName, NewPosition, false, true ));
+			item = GetGame().CreateObject( ClassName, NewPosition, false, true );
 		}else{
-			
-			item = EntityAI.Cast(player.GetInventory().CreateInInventory( ClassName ));
-			Class.CastTo(itemBs, item);
+
+			item = player.GetInventory().CreateInInventory( ClassName );
+			itemBs = ItemBase.Cast(item);	
 			itemBs.SetQuantity(1);
 		}
 	}
@@ -214,7 +222,7 @@ class AdminTool extends ModuleManager
 			{
 				if (players.Get(i).GetIdentity().GetName() == chat_params.param2 && m_AdminList.Contains(players.Get(i).GetIdentity().GetPlainId()))
 				{
-					Class.CastTo(Admin, players.Get(i));
+					Admin 		  = players.Get(i);
 					AdminIdentity = Admin.GetIdentity();
 					AdminUID 	  = AdminIdentity.GetPlainId();
 				}
@@ -234,11 +242,38 @@ class AdminTool extends ModuleManager
 
 					switch(cCommand)
 					{
+						case "/savePoint":
+						if (cData == "" || cData == "/savePoint")
+						{
+							Msgparam = new Param1<string>( "Error Adding Point, Please Provide A Name for the Spawn Point." );
+							GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+						}
+						else
+						{
+							ref map<string, map<string,float>> m_SpawnPoints;
+							ref map<string,float> InfoChached;
+							JsonFileLoader<ref map<string, map<string,float>>>.JsonLoadFile("$profile:SpawnPoints.json", m_SpawnPoints);
+						
+						    ref map<string,float> PointsInfo = new map<string,float>;
+						    vector savePos = Admin.GetPosition()
+						    string strsavePos = savePos.ToString();
+						    strsavePos.Replace("<","");
+						    strsavePos.Replace(">","");
+						    strsavePos.Replace(",","");
+							PointsInfo.Insert(strsavePos,900);
+							m_SpawnPoints.Insert(cData,PointsInfo);
+						   
+						    JsonFileLoader<ref map<string, map<string,float>>>.JsonSaveFile("$profile:SpawnPoints.json", m_SpawnPoints);
+						    Msgparam = new Param1<string>( "Added Spawn "+cData +" To the Json!, Point will be useable after restart" );
+							GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+						}
+						break;
+
 						case "/strip":
 								for ( int a = 0; a < players.Count(); ++a )
 								{
-									Class.CastTo(selectedPlayer, players.Get(a));
-									selectedIdentity = selectedPlayer.GetIdentity();
+									selectedPlayer = PlayerBase.Cast(  players.Get(a) );
+									selectedIdentity = PlayerIdentity.Cast(  selectedPlayer.GetIdentity() );
 									if ( selectedIdentity.GetName() == cData )
 									{
 										selectedPlayer.RemoveAllItems();
@@ -264,8 +299,8 @@ class AdminTool extends ModuleManager
 							case "/tpp":
 								for ( int z = 0; z < players.Count(); ++z )
 								{
-									Class.CastTo(selectedPlayer, players.Get(z));
-									selectedIdentity = selectedPlayer.GetIdentity();
+									selectedPlayer = PlayerBase.Cast( players.Get(z) );
+									selectedIdentity = PlayerIdentity.Cast( selectedPlayer.GetIdentity() );
 									if ( selectedIdentity.GetName() == cData )
 									{
 										selectedPlayer.SetPosition(Admin.GetPosition());
@@ -321,10 +356,6 @@ class AdminTool extends ModuleManager
 							break;
 
 							case "/tpc":
-								if(Admin.GetTransport()){
-									Print("Admin is inside of Transport.");
-									break;
-								}
 								vector tpPos = cData.ToVector();
 								vector fixPlayerPos;
 								fixPlayerPos[0] = tpPos[0];
@@ -341,7 +372,7 @@ class AdminTool extends ModuleManager
 							case "/export":
 								if (m_MissionServer.GetModule(AdvancedLoadouts))
 								{
-									AdvancedLoadouts.Cast(m_MissionServer.GetModule(AdvancedLoadouts)).ExportInventory(Admin);
+									AdvancedLoadouts.Cast(m_MissionServer.GetModule(AdvancedLoadouts)).ExportInventory(Admin,cData);
 									Msgparam = new Param1<string>( "LOADOUT EXPORTED!" );
 									GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
 								}
@@ -356,10 +387,8 @@ class AdminTool extends ModuleManager
 							EntityAI CurrentWeapon = Admin.GetHumanInventory().GetEntityInHands();
 							if( CurrentWeapon )
 								{
-									Magazine foundMag;
 									CurrentWeapon.SetHealth( CurrentWeapon.GetMaxHealth( "", "" ) );
-									Class.CastTo(foundMag, CurrentWeapon.GetAttachmentByConfigTypeName("DefaultMagazine"));
-
+									Magazine foundMag = ( Magazine ) CurrentWeapon.GetAttachmentByConfigTypeName( "DefaultMagazine" );
 									if( foundMag && foundMag.IsMagazine())
 									{
 										foundMag.ServerSetAmmoMax();
@@ -461,10 +490,21 @@ class AdminTool extends ModuleManager
 							break;
 							*/
 							case "/heal":
-								 Msgparam = new Param1<string>( "Player Healed!" );
-								 GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
-								 Admin.SetHealth( Admin.GetMaxHealth( "", "" ) );
-								 Admin.SetHealth( "","Blood", Admin.GetMaxHealth( "", "Blood" ) );
+								Msgparam = new Param1<string>( "Player Healed!" );
+								GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+								Admin.SetHealth( Admin.GetMaxHealth( "", "" ) );
+								Admin.SetHealth( "","Blood", Admin.GetMaxHealth( "", "Blood" ) );
+								Admin.GetStatHeatComfort().Set(0);
+								Admin.GetStatTremor().Set(0);
+								Admin.GetStatWet().Set(0);
+								Admin.GetStatEnergy().Set(20000);
+								Admin.GetStatWater().Set(5000);
+								Admin.GetStatStomachEnergy().Set(20000);
+								Admin.GetStatStomachWater().Set(5000);
+								Admin.GetStatStomachVolume().Set(0);
+								Admin.GetStatDiet().Set(2500);
+								Admin.GetStatSpecialty().Set(1);
+								Admin.SetBleedingBits(0);
 							break;
 
 							case "/kill":
@@ -481,9 +521,7 @@ class AdminTool extends ModuleManager
 							case "/killall":
 								for ( int ig = 0; ig < players.Count(); ++ig )
 								{
-									PlayerBase Target;
-									Class.CastTo(Target, players.Get(ig));
-
+									PlayerBase Target = players.Get(ig);
 									if ( Target.GetIdentity() != AdminIdentity )
 									{
 										Target.SetHealth(0);						
@@ -492,36 +530,54 @@ class AdminTool extends ModuleManager
 							break;
 							
 							case "/spawncar":
-								EntityAI MyV3S;
-								vector NewPosition;
-								vector OldPosition;
-								OldPosition = Admin.GetPosition();
-								NewPosition[0] = OldPosition[0] + 1.5;
-								NewPosition[1] = OldPosition[1] + 0.2;
-								NewPosition[2] = OldPosition[2] + 1.5;
-								MyV3S = EntityAI.Cast(GetGame().CreateObject( "OffroadHatchback", NewPosition, false, true, true ));
-								Car VS3_Car_Type = Car.Cast( MyV3S );
+								Car MyNiva;
+								float adminHeading = MiscGameplayFunctions.GetHeadingAngle(Admin);
+								vector posModifier = Vector(-(3 * Math.Sin(adminHeading)), 0, 3 * Math.Cos(adminHeading));
+								
+								MyNiva = Car.Cast(GetGame().CreateObject( "OffroadHatchback", Admin.GetPosition() + posModifier, false, true, true ));		            
+								MyNiva.GetInventory().CreateAttachment("HatchbackHood");
+								MyNiva.GetInventory().CreateAttachment("HatchbackTrunk");
+								MyNiva.GetInventory().CreateAttachment("HatchbackDoors_CoDriver");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("HatchbackWheel");
+								MyNiva.GetInventory().CreateAttachment("SparkPlug");
+								MyNiva.GetInventory().CreateAttachment("EngineBelt");
+								MyNiva.GetInventory().CreateAttachment("CarBattery");
+								
+								MyNiva.Fill( CarFluid.FUEL, MyNiva.GetFluidCapacity( CarFluid.FUEL ) );
+								MyNiva.Fill( CarFluid.OIL, MyNiva.GetFluidCapacity( CarFluid.OIL ) );
+								MyNiva.Fill( CarFluid.BRAKE, MyNiva.GetFluidCapacity( CarFluid.BRAKE ) );
+								MyNiva.Fill( CarFluid.COOLANT, MyNiva.GetFluidCapacity( CarFluid.COOLANT ) );
+								
+								Msgparam = new Param1<string>( "Niva spawned." );
+								GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+							break;
 
-								ref array<string> carParts = {
-									"HatchbackHood", "HatchbackTrunk",
-									"HatchbackDoors_CoDriver", "HatchbackDoors_Driver",
-									"HatchbackWheel", "HatchbackWheel",
-									"HatchbackWheel", "HatchbackWheel",
-									"SparkPlug", "CarBattery",
-									"CarRadiator", "EngineBelt",
-									"HeadlightH7", "HeadlightH7",
-									"HatchbackWheel",
-								};
-
-								for(int cs = 0; cs < carParts.Count(); cs++)
+							case "/refuel": 
+								ref array<Object> nearest_objects = new array<Object>;
+								ref array<CargoBase> proxy_cargos = new array<CargoBase>;
+								Car toBeFilled;
+								GetGame().GetObjectsAtPosition ( Admin.GetPosition(), 10, nearest_objects, proxy_cargos );
+			
+								for (i = 0; i < nearest_objects.Count(); i++) 
 								{
-									MyV3S.GetInventory().CreateAttachment(carParts.Get(cs));
-								}							
-				
-								VS3_Car_Type.Fill(CarFluid.FUEL, 1000);
-								VS3_Car_Type.Fill(CarFluid.OIL, 1000);
-								VS3_Car_Type.Fill(CarFluid.BRAKE, 1000);
-								VS3_Car_Type.Fill(CarFluid.COOLANT, 1000);
+									if (nearest_objects.Get(i).IsKindOf("CarScript")) 
+									{
+										toBeFilled = Car.Cast(nearest_objects[i]);
+										float fuelReq = toBeFilled.GetFluidCapacity( CarFluid.FUEL ) - (toBeFilled.GetFluidCapacity( CarFluid.FUEL ) * toBeFilled.GetFluidFraction( CarFluid.FUEL ));
+										float oilReq = toBeFilled.GetFluidCapacity( CarFluid.OIL ) - (toBeFilled.GetFluidCapacity( CarFluid.OIL ) * toBeFilled.GetFluidFraction( CarFluid.OIL ));
+										float coolantReq = toBeFilled.GetFluidCapacity( CarFluid.COOLANT ) - (toBeFilled.GetFluidCapacity( CarFluid.COOLANT ) * toBeFilled.GetFluidFraction( CarFluid.COOLANT ));
+										float brakeReq = toBeFilled.GetFluidCapacity( CarFluid.BRAKE ) - (toBeFilled.GetFluidCapacity( CarFluid.BRAKE ) * toBeFilled.GetFluidFraction( CarFluid.BRAKE ));
+										toBeFilled.Fill( CarFluid.FUEL, fuelReq );
+										toBeFilled.Fill( CarFluid.OIL, oilReq );
+										toBeFilled.Fill( CarFluid.COOLANT, coolantReq );
+										toBeFilled.Fill( CarFluid.BRAKE, brakeReq );
+										Msgparam = new Param1<string>( nearest_objects.Get(i).GetType() + " refueled: " +fuelReq+ "L added, all fluids maxed" );
+										GetGame().RPCSingleParam(Admin, ERPCs.RPC_USER_ACTION_MESSAGE, Msgparam, true, AdminIdentity);
+									}
+								}
 							break;
 
 							default:
