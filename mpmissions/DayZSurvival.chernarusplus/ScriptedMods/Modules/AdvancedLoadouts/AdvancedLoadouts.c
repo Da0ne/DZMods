@@ -76,8 +76,8 @@ class AdvancedLoadouts extends ModuleManager
 	array<string> ConstructCargoArray(ItemBase SentItem)
 	{
 		//Gets cargo within cargo as well
-		array<string> ret = new array<string>;
 		InventoryItem item;
+		array<string> ret = new array<string>;
 		Class.CastTo(item, SentItem);
 	
 		if (!item) return NULL;
@@ -90,26 +90,24 @@ class AdvancedLoadouts extends ModuleManager
 				InventoryItemBase inventoryItem;
 				Class.CastTo(inventoryItem, cargo.GetItem(j));
 				ret.Insert(inventoryItem.GetType());
-
-				if (inventoryItem.GetInventory().GetCargo()) //Check for Cargo within cargo
+				
+				CargoBase Subcargo = inventoryItem.GetInventory().GetCargo();
+				if (Subcargo) //Check for Cargo within cargo
 				{
-					CargoBase Subcargo = inventoryItem.GetInventory().GetCargo();
 					for (j = 0; j < Subcargo.GetItemCount(); ++j)
 					{
-						InventoryItemBase SubinventoryItem;
-						Class.CastTo(SubinventoryItem, Subcargo.GetItem(j));
-						ret.Insert(SubinventoryItem.GetType());
+						InventoryItemBase cargoItem;
+						Class.CastTo(cargoItem, Subcargo.GetItem(j));
+						ret.Insert(cargoItem.GetType());
 					}
 				}
 				else
 				{
-					if (SubinventoryItem.GetInventory().AttachmentCount())
+					if (inventoryItem.GetInventory().AttachmentCount())
 					{
-						for (j = 0; j < SubinventoryItem.GetInventory().AttachmentCount(); ++j)
+						for (j = 0; j < inventoryItem.GetInventory().AttachmentCount(); ++j)
 						{
-							InventoryItemBase SubAtt;
-							Class.CastTo(SubAtt, SubinventoryItem);
-							ret.Insert(SubAtt.GetInventory().GetAttachmentFromIndex(j).GetType());
+							ret.Insert(inventoryItem.GetInventory().GetAttachmentFromIndex(j).GetType());
 						}
 					}
 				}
@@ -118,7 +116,7 @@ class AdvancedLoadouts extends ModuleManager
 		else
 		{
 			for (j = 0; j < item.GetInventory().AttachmentCount(); j++)
-			{
+			{	
 				Class.CastTo(inventoryItem, item.GetInventory().GetAttachmentFromIndex(j));
 				ret.Insert(inventoryItem.GetType());
 			}
@@ -128,25 +126,25 @@ class AdvancedLoadouts extends ModuleManager
 	}
 
 	void ExportInventory(PlayerBase player)
-	{
-		ItemBase Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet;
+    {    
+        ItemBase Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet;
 
-		Hands    = player.GetHumanInventory().GetEntityInHands();
-		Shoulder = player.GetHumanInventory().FindAttachment(InventorySlots.SHOULDER);
-		Melee    = player.GetHumanInventory().FindAttachment(InventorySlots.MELEE);
-		HeadGear = player.GetHumanInventory().FindAttachment(InventorySlots.HEADGEAR);
-		Mask     = player.GetHumanInventory().FindAttachment(InventorySlots.MASK);
-		EyeWear  = player.GetHumanInventory().FindAttachment(InventorySlots.EYEWEAR);
-		Gloves   = player.GetHumanInventory().FindAttachment(InventorySlots.GLOVES);
-		Armband  = player.GetHumanInventory().FindAttachment(InventorySlots.ARMBAND);
-		Body     = player.GetHumanInventory().FindAttachment(InventorySlots.BODY);
-		Vest     = player.GetHumanInventory().FindAttachment(InventorySlots.VEST);
-		Back     = player.GetHumanInventory().FindAttachment(InventorySlots.BACK);
-		Legs     = player.GetHumanInventory().FindAttachment(InventorySlots.LEGS);
-		Feet     = player.GetHumanInventory().FindAttachment(InventorySlots.FEET);
+        Class.CastTo(Hands, player.GetHumanInventory().GetEntityInHands());
+        Class.CastTo(Shoulder, player.GetHumanInventory().FindAttachment(InventorySlots.SHOULDER));
+        Class.CastTo(Melee, player.GetHumanInventory().FindAttachment(InventorySlots.MELEE));
+        Class.CastTo(HeadGear, player.GetHumanInventory().FindAttachment(InventorySlots.HEADGEAR));
+        Class.CastTo(Mask, player.GetHumanInventory().FindAttachment(InventorySlots.MASK));
+        Class.CastTo(EyeWear, player.GetHumanInventory().FindAttachment(InventorySlots.EYEWEAR));
+        Class.CastTo(Gloves, player.GetHumanInventory().FindAttachment(InventorySlots.GLOVES));
+        Class.CastTo(Armband, player.GetHumanInventory().FindAttachment(InventorySlots.ARMBAND));
+        Class.CastTo(Body, player.GetHumanInventory().FindAttachment(InventorySlots.BODY));
+        Class.CastTo(Vest, player.GetHumanInventory().FindAttachment(InventorySlots.VEST));
+        Class.CastTo(Back, player.GetHumanInventory().FindAttachment(InventorySlots.BACK));
+        Class.CastTo(Legs, player.GetHumanInventory().FindAttachment(InventorySlots.LEGS));
+        Class.CastTo(Feet, player.GetHumanInventory().FindAttachment(InventorySlots.FEET));
 
-		ExportToJSON(Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet);
-	}
+        ExportToJSON(Hands,Shoulder,Melee,HeadGear,Mask,EyeWear,Gloves,Armband,Body,Vest,Back,Legs,Feet);
+    }
 
 	void ExportToJSON(ItemBase Hands, ItemBase Shoulder, ItemBase Melee ,ItemBase HeadGear,ItemBase Mask,ItemBase EyeWear,ItemBase Gloves,ItemBase Armband,ItemBase Body,ItemBase Vest,ItemBase Back,ItemBase Legs,ItemBase Feet)
 	{
@@ -274,6 +272,8 @@ class AdvancedLoadouts extends ModuleManager
         		JsonFileLoader<map<string,map<string,map<string,map<string,map<string, ref array<string>>>>>>>.JsonSaveFile(file_path + ".json", SlotData);
         	}
         }
+
+        Print("File " + file_path + " was writen by the use of the export command.");
 	}
 
 	//=========================Import + Spwn Loadout Functions =================================
@@ -389,7 +389,8 @@ class AdvancedLoadouts extends ModuleManager
 					else
 					{
 						itemEnt = player.GetInventory().CreateInInventory( strClassName );
-						itemBs = ItemBase.Cast(itemEnt);
+						Class.CastTo(itemBs, itemEnt);
+
 						if (arrAttachments.Count() >= 1)
 						{
 							for (j = 0; j < arrAttachments.Count(); ++j)
@@ -426,7 +427,7 @@ class AdvancedLoadouts extends ModuleManager
 			EntityAI ShitBase;
 
 			ShitBase = player.GetInventory().CreateInInventory( "Rag" );
-			TrashBase = ItemBase.Cast(ShitBase);							
+			Class.CastTo(TrashBase, ShitBase);							
 			TrashBase.SetQuantity(1);
 			Print("StartingEquipSetup>>ERROR:: No Static Custom Loadouts were found!");
 	    }
@@ -495,7 +496,7 @@ class AdvancedLoadouts extends ModuleManager
 		player.GetInventory().CreateInInventory( "Battery9V" );
 		
 		itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-		itemBs = ItemBase.Cast(itemEnt);
+		Class.CastTo(itemBs, itemEnt);
 		itemBs.SetQuantity(6);
 
 		player.SetQuickBarEntityShortcut(itemBs, 0, true);
@@ -607,7 +608,7 @@ class AdvancedLoadouts extends ModuleManager
 				{
 					if (GetGame().IsKindOf( Extras.Get(ii), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ii), "Ammunition_Base")) )
 					{
-						mag = player.GetHumanInventory().CreateInInventory(Extras.Get(ii));
+						Class.CastTo(mag, player.GetHumanInventory().CreateInInventory(Extras.Get(ii)));
 						MinQuantity = 2;
 						if (mag)
 						{
@@ -635,7 +636,7 @@ class AdvancedLoadouts extends ModuleManager
 				{
 					for (int iz = 0; iz < attachments.Count(); ++iz)
 					{
-						myAttachmentIB = itemAI.GetInventory().CreateAttachment( attachments.Get(iz) );
+						Class.CastTo(myAttachmentIB, itemAI.GetInventory().CreateAttachment( attachments.Get(iz) ));
 						if (PoweredOptics.Contains(attachments.Get(iz)))
 						{
 							myAttachmentIB.GetInventory().CreateInInventory( "Battery9V" );
@@ -649,7 +650,7 @@ class AdvancedLoadouts extends ModuleManager
 					{
 						if (GetGame().IsKindOf( Extras.Get(ip), "Magazine_Base") && ! (GetGame().IsKindOf( Extras.Get(ip), "Ammunition_Base")) )
 						{
-							mag = player.GetInventory().CreateInInventory( Extras.Get(ip) );
+							Class.CastTo(mag, player.GetInventory().CreateInInventory( Extras.Get(ip) ));
 							player.SetQuickBarEntityShortcut(mag, 1, true);   //Puts the mag for the secondary on hotkey 2
 
 							MinQuantity = 2;

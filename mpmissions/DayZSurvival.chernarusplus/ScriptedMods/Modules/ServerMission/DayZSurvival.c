@@ -2,7 +2,7 @@
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Tunables.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdminTool\\AdminTool.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdvancedLoadouts\\AdvancedLoadouts.c"
-#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\Misc\\BuildingSpawner.c"
+#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\CustomBuildings\\BuildingSpawner.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\SafeZone\\SafeZoneFunctions.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\ServerEvents\\InfectedHordes.c"
 
@@ -44,6 +44,11 @@ class DayZSurvival : MissionServer
 		if (ModTunables.Cast(GetModule(ModTunables)).IsActive("SafeZone"))
 		{
 			m_Modules.Insert(new SafeZone(this));
+		}
+
+		if (ModTunables.Cast(GetModule(ModTunables)).IsActive("CustomBuildings"))
+		{
+			m_Modules.Insert(new BuildingSpawner(this, CustomBuildings.Cast(ModTunables.Cast(GetModule(ModTunables)).getBuildingList())));
 		}
 	}
 	
@@ -97,12 +102,6 @@ class DayZSurvival : MissionServer
 			g_Game.SetProfileString("SessionFeed", "false");
 		}
 
-		if (ModTunables.Cast(GetModule(ModTunables)).IsActiveMisc("CustomBuildings"))
-		{
-			ref BuildingSpawner bldspnwer = new BuildingSpawner;
-			bldspnwer.Init();
-		}
-
 		if (ModTunables.Cast(GetModule(ModTunables)).IsActiveMisc("StaminaStatus"))
 		{
 			m_StaminaStatus = true; //Disable Stamina
@@ -146,7 +145,8 @@ class DayZSurvival : MissionServer
 				m_currentPlayer = 0;
 			}
 
-			PlayerBase currentPlayer = PlayerBase.Cast(m_Players.Get(m_currentPlayer));
+			PlayerBase currentPlayer;
+			Class.CastTo(currentPlayer, m_Players.Get(m_currentPlayer));
 			currentPlayer.OnTick();
 
 			if (m_StaminaStatus) {
@@ -221,7 +221,7 @@ class DayZSurvival : MissionServer
 			{
 				//Vanilla
 				itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-				itemBs = ItemBase.Cast(itemEnt);							
+				Class.CastTo(itemBs, itemEnt);							
 				itemBs.SetQuantity(6);
 			}
 
@@ -250,7 +250,7 @@ class DayZSurvival : MissionServer
 		{
 			//Vanilla
 			itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-			itemBs = ItemBase.Cast(itemEnt);							
+			Class.CastTo(itemBs, itemEnt);							
 			itemBs.SetQuantity(6);
 		}
 	}
