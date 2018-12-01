@@ -13,7 +13,7 @@ Wrong Command Usage:
 |  strip  |  Strip targeted players of all gear |  Up to 5 Player Nanes |
 |  tpm   |  Teleports caller to another player  |  One Player Name |
 |  tpp   |  Teleports multiple player to caller |  3 Player names|
-|  tpto  |  Teleports caller to preset location on the map |  One Location name: see [Locations](https://github.com/D/DZMods/new/master/mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Modules/AdminTool#locations) |
+|  tpto  |  Teleports caller to preset location on the map |  One Location argument: see [Locations](https://github.com/D/DZMods/new/master/mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Modules/AdminTool#locations) |
 |  tpc   |  Teleports caller to point on the map | x coordinate, y coordinate, y coordinate  |
 |  spi   |  Spawns item in callers inventory |  One name of item |
 |  spg   |  Spawns item on the ground around caller |  One name of item |
