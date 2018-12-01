@@ -255,7 +255,7 @@ class AdminTool extends ModuleManager
 							JsonFileLoader<ref map<string, map<string,float>>>.JsonLoadFile("$profile:SpawnPoints.json", m_SpawnPoints);
 						
 						    ref map<string,float> PointsInfo = new map<string,float>;
-						    vector savePos = Admin.GetPosition()
+						    vector savePos = Admin.GetPosition();
 						    string strsavePos = savePos.ToString();
 						    strsavePos.Replace("<","");
 						    strsavePos.Replace(">","");
