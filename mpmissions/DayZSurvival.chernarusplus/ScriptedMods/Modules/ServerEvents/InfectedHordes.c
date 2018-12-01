@@ -93,9 +93,9 @@ class InfectedHordes
 
 				if (oSkin == 5)
 				{
-					AIzmb.SetObjectMaterial( 0, "DZ\\data\\data\\laser.rvmat" );
-					AIzmb.SetObjectMaterial( 1, "DZ\\data\\data\\laser.rvmat" );
-					AIzmb.SetObjectMaterial( 2, "DZ\\data\\data\\laser.rvmat" );
+					AIzmb.SetObjectMaterial( 0, "DZ\\data\\laser.rvmat" );
+					AIzmb.SetObjectMaterial( 1, "DZ\\data\\laser.rvmat" );
+					AIzmb.SetObjectMaterial( 2, "DZ\\data\\laser.rvmat" );
 				}
 			}
 		}
