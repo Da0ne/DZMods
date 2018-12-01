@@ -53,7 +53,7 @@ HowToUse:  Login as admin, type the command /savePoint followed by a name you wi
 ```bash
 -mod=@VanillaPlusPlus;@RPCFramework -config=FolderFromStepOne\serverDZ.cfg -profiles=FolderFromStepOne -name=myServerName -scrAllowFileWrite
 ```
-
+NOTE: Make sure you add the keys to the server. Check 'Key' folder.
 NOTE: The -name command will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
 NOTE: If you forget -scrAllowFileWrite then many of stuff would not work, eg load-out system
 
