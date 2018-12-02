@@ -95,7 +95,7 @@ NOTE: If you forget -scrAllowFileWrite then many of stuff would not work, eg loa
 
 ### USEFUL LINKS:
 - How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
-- Full List of Admin Commands: 
+- Full List of Admin Commands: [Here](https://github.com/Da0ne/DZMods/blob/master/mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Modules/AdminTool/README.md)
 
 ## CREDITS:
 - GravityWolf #6981 || Code Snippets, BuildingSpawner script, overall contribution to the mod! github.com/GravityWolfNotAmused
