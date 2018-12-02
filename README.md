@@ -1,40 +1,52 @@
 
 # DayZ Vanilla++ Mod v0.4
 
-## Update: December 1st 2018
-#### Version 0.4 is FINALLY HERE! Client SUPPORT! yeeet..Eskidddit...ok enough of that.
-#### WORKSHOP SUPPORT FINALLY! 
-#### This GitHub post will include Client + Server Files however you won't be able to edit the client side of things...due to it being a signed PBO, thus all players on your server need to subscribe to the mod on steam via this [Vanilla++ Client Files]](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068) 
+**Update: December 1st 2018**
 
-## NOTE: PLEASE GO THRU THE SETUP STEPS BEFORE YOU OPEN AN ISSUE!
+**Version 0.4 is FINALLY HERE! Client SUPPORT! yeeet..Eskidddit...ok enough of that.**
 
-#### New Features: 
-##### -Added: Spawn Selection Menu, players are able to select where to spawn with startup gear of their choosing! Spawn points are editable by server admins via the AdminTool and Tunables. Individual Cooldown intervals are included for each spawn point. 
-##### -Added: Map UI accessible by pressing INSERT, comes with many features! And many more features that i can't be asked to write down...i hate doing README...just have a look at the screen shots on the steam workshop
----
-#### New Admin Commands:
-/savePoint  Saves current admin location and adds it as a spawn point for players to use during the spawn scene.
-HowToUse:  Login as admin, type the command /savePoint followed by a name you wish to give for the spawn point. Note: Make sure you don't include a duplicate name or else the point will not be added! eg. /savePoint Berezino-South
+**WORKSHOP SUPPORT FINALLY!** 
 
-/refuel the following is to refuel nearby vehicles
+**This GitHub post will include Client + Server Files however you won't be able to edit the client side of things...due to it being a signed PBO, thus all players on your server need to subscribe to the mod on steam via this** [Vanilla++ Client Files](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068) 
 
-####  New changes to existing commands:
-/updateLoadouts only works for RandomlyGenerated loadout group. The Static loadouts are auto updated upon export.
+**NOTE: PLEASE GO THRU THE SETUP STEPS BEFORE YOU OPEN AN ISSUE!**
 
-/heal 
--Added stop bleeding
+- New Features: 
+  - Added: Spawn Selection Menu
+    - Usage: Players are able to select where to spawn with startup gear of their choosing!Spawn points are editable by server admins via the AdminTool and Tunables. Individual Cooldown intervals are included for each spawn point.
+  - Added: Map UI
+    - Usage:
+      - Toggled by any player who presses the Insert key on their keyboards.
+    - Features: 
+      - Marker placement, and saving.
+      - Color chooser.
+      - Remove from list.
+      - Ability to zoom in and out.
+- Added:
+  - Commands:
+    - Added:
+      - savepoint: Saves current admin location and adds it as a spawn point for players to use during the spawn scene.
+        - Usage: Login as admin, type the command /savePoint followed by a name you wish to give the spawn point.
+        - Note: Make sure you don't include a duplicate name or else the point will not be added! eg. /savePoint Berezino-South
+      - refuel: Refules vehicles that are close to the Admin.
+        - Usage: Login as admin, type the command /refuel while close to a car, and boom. Done.
+    - Changed:
+      - updateLoadouts:
+        - Change: only works with RandomlyGenerated loadout group. Static loadouts are auto updated upon exporting.
+      - heal:
+        - Change: Stops bleeding
+- Bug Fixes:
+  - Fixed:
+    - Fixing different casting problems, and identifying how to avoid them in our day to day development.
+    - Mutiple null points, and logical errors.
+    - So many things, it's hard to keep a log of them.
 
----
-### BugFixes:
-##### -Fixed so many things....i cant even list them Kappa.
-##### No seriously, fixed lots of things, i just did not document what they were :P 
----
 ### IMPORTANT :
 - For those who own a server provide by [Vilayer.com](https://www.Vilayer.com), can auto install the mod via the `AddonManager` (special thanks goes to the Vilayer team)!
 
 ![https://www.vilayer.com](https://ci5.googleusercontent.com/proxy/yE1RaRsPdehe3Y5lTBg3K2UmKkKYBPUl4HOLneY8hzalp34EayGB0c8qeUxsz4W_vaGETV57DzOYC1huj7bvJmDlyfIodhIE2p07uyLeVuvkyCvCOmKg=s0-d-e1-ft#https://www.vilayer.com/templates/ColoNode/html/img/logo_dark.png)
 -
-## Installation:
+## Installation: 
 
 ### Step One:
 1. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
