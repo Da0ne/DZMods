@@ -38,8 +38,10 @@ class BuildingSpawner extends ModuleManager
 			Print("BuildingSpawner::spawnCustomBuildings: Spawning:(" + building.getName() + ") at: <" + building.getLocation() + ">.");
 			
 			Object obj = GetGame().CreateObject(building.getName(), building.getLocation().ToVector(), false, true);
-			obj.SetOrientation(building.getOrientation().ToVector());
+			obj.SetOrientation(obj.GetOrientation());
+			obj.SetPosition(obj.GetPosition());
 			obj.SetDirection(obj.GetDirection());
+			obj.SetOrientation(building.getOrientation().ToVector());
 		}
 		Print("Buildings Spawned: " + customBuildings.Count().ToString());
 	}
