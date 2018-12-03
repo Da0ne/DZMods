@@ -11,36 +11,6 @@
 
 **NOTE: PLEASE GO THRU THE SETUP STEPS BEFORE YOU OPEN AN ISSUE!**
 
-- New Features: 
-  - Added: Spawn Selection Menu
-    - Usage: Players are able to select where to spawn with startup gear of their choosing!Spawn points are editable by server admins via the AdminTool and Tunables. Individual Cooldown intervals are included for each spawn point.
-  - Added: Map UI
-    - Usage:
-      - Toggled by any player who presses the Insert key on their keyboards.
-    - Features: 
-      - Marker placement, and saving.
-      - Color chooser.
-      - Remove from list.
-      - Ability to zoom in and out.
-- Added:
-  - Commands:
-    - Added:
-      - savepoint: Saves current admin location and adds it as a spawn point for players to use during the spawn scene.
-        - Usage: Login as admin, type the command /savePoint followed by a name you wish to give the spawn point.
-        - Note: Make sure you don't include a duplicate name or else the point will not be added! eg. /savePoint Berezino-South
-      - refuel: Refules vehicles that are close to the Admin.
-        - Usage: Login as admin, type the command /refuel while close to a car, and boom. Done.
-    - Changed:
-      - updateLoadouts:
-        - Change: only works with RandomlyGenerated loadout group. Static loadouts are auto updated upon exporting.
-      - heal:
-        - Change: Stops bleeding
-- Bug Fixes:
-  - Fixed:
-    - Fixing different casting problems, and identifying how to avoid them in our day to day development.
-    - Mutiple null points, and logical errors.
-    - So many things, it's hard to keep a log of them.
-
 ### IMPORTANT :
 - For those who own a server provide by [Vilayer.com](https://www.Vilayer.com), can auto install the mod via the `AddonManager` (special thanks goes to the Vilayer team)!
 
@@ -48,55 +18,93 @@
 -
 ## Installation: 
 
+**Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from [HERE](https://steamcommunity.com/sharedfiles/filedetails/?id=1559212036)**
+
 ### Step One:
-1. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
-2. Open the 'mpmissions' which is located inside of your server directory.
-3. Copy 'DayZSurvival.chernarusplus' into this location.
+1. Download Zip from: [Here](https://github.com/Da0ne/DZMods/archive/master.zip)
+2. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
+3. Open the 'mpmissions' which is located inside of your server directory.
+4. Copy 'DayZSurvival.chernarusplus' into this location.
 
 ### Step Two:
 1. Move your server config file ```serverDZ.cfg``` file into the folder you named in Step One.
 2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
-3. Place the folder ```@VanillaPlusPlus``` into your server's main directory. 
-4. ### Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from [HERE](https://steamcommunity.com/sharedfiles/filedetails/?id=1559212036)
+3. Place the folder ```@VanillaPlusPlus``` into your server's main directory.
 
 ### Step Three:
-1. Change your startup command line to include:
+1. Go to the !workshop folder inside of your DayZ client.
+2. Copy the @RPCFramework and it's key to the proper location of your server. 
+    - Key Location:
+      - server root:/keys 
+    - Add-on location:
+      - server root:/
+3. Change your startup following start-up commandlines to include:
 
+Server:
 ```bash
 -mod=@VanillaPlusPlus;@RPCFramework -config=FolderFromStepOne\serverDZ.cfg -profiles=FolderFromStepOne -name=myServerName -scrAllowFileWrite
 ```
-NOTE: Make sure you add the keys to the server. Check 'Key' folder.
-NOTE: The -name command will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.
-NOTE: If you forget -scrAllowFileWrite then many of stuff would not work, eg load-out system
+
+Client:
+```
+-mod=@VanillaPlusPlus;@RPCFramework
+```
+
+**NOTE: Client can just enable mods through DayZ Launcher**
+
+**NOTE: Make sure you add the keys to the server. Check 'Key' folder.**
+
+**NOTE: The -name command will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.**
+
+**NOTE: If you forget -scrAllowFileWrite then many of stuff would not work, eg load-out system**
+---
 
 # Configuration:
 - In order to turn on, or off different functionality, check the top of ``'/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c'``
 
-## Features:
-### Ability to make customized loadouts using the AdminTool .
-- This feature allows the server owner to create loadouts for fresh spawns to spawn with. By adding your desired items to ```\ScriptedMods\LoadOuts\RandomlyGenerated``` OR Enable Static Loadouts via the ```Tuneables.c``` and use the ```/export loadoutname``` command via the AdminTools to added a preset so players can have the ability to choose it on spawn!
+# Features:
 
-### Enable/Disable Stamina
-### Spawn Custom Buildings
+## In-game Map:
+- Just as the header suggests, we created a in-game map for players to use.
 
-### Chatbased Admin Tools ( UI SUPPORT COMING SOON! )
+![Map Interface](https://steamuserimages-a.akamaihd.net/ugc/963104528643221326/D74C7BB2CA2891C951869C679F3F4D13DE177E69/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C637%3A358&composite-to=*,*%7C637%3A358&background-color=black)
+
+## Custom Spawn lodaouts with Spawn Menu.
+- This feature allows the server to create loadouts for fresh spawns to spawn with.
+- The server owner can also set spawn points around the map.
+
+![SpawnMenu1](https://steamuserimages-a.akamaihd.net/ugc/963104528643225571/1E0C1137F9E62FBD7DC52D8F23E5FA104F733EF3/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C637%3A358&composite-to=*,*%7C637%3A358&background-color=black)
+
+![SpawnMenu2](https://steamuserimages-a.akamaihd.net/ugc/963104528643226368/2133CEF77A50687271E10F26C591B865226EAD53/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C637%3A358&composite-to=*,*%7C637%3A358&background-color=black)
+
+## Ability to make customized loadouts using the AdminTool .
+- This feature allows the server owner to create loadouts for fresh spawns to spawn with. 
+- By adding your desired items to \ScriptedMods\LoadOuts\RandomlyGenerated OR Enable Static Loadouts via the Tuneables.c.
+- Use the /export loadoutname command via the AdminTools to added a preset players can choose to spawn with. (Only used with Static Loadouts)
+
+## Enable/Disable Stamina
+- Add -DisableStamina to your startup commandline to enable, and remove it from your startup commandline to disable.
+
+## Spawn Custom Buildings
+- This feature allows the server owner to place CustomBuildings by minimalizing the amount of code needed to spawn in additional buildings.
+
+## Chatbased Admin Tools
 - This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg.
 
-#### An admin can login by typing the following into DayZ's chat system:
+**An admin can login by typing the following into DayZ's chat system:**
 ```
 #login mypassword
 ```
 
-### Player Score/Kill Activity Tracker
+## Player Score/Kill Activity Tracker
 - This feature creates two files into the servers profile, and stores detailed kill information and player stats such as total deaths, and kills.
 
-### Chatbased Kill Messages ( UI COMING SOON! )
+## Chatbased Kill Messages
 - Sends chat messages showing who killed who, and who committed suicide.
+- UI Coming soon...
 
-### USEFUL LINKS:
+### USEFUL THINGS:
 - How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
-- Full List of Admin Commands: [Here](https://github.com/Da0ne/DZMods/blob/master/mpmissions/DayZSurvival.chernarusplus/ScriptedMods/Modules/AdminTool/README.md)
 
 ## CREDITS:
-- GravityWolf #6981 || Code Snippets, BuildingSpawner script, overall contribution to the mod! github.com/GravityWolfNotAmused
 - @Sen ( @zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
