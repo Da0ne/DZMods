@@ -57,6 +57,7 @@ Client:
 **NOTE: The -name command will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.**
 
 **NOTE: If you forget -scrAllowFileWrite then many of stuff would not work, eg load-out system**
+
 ---
 
 # Configuration:
