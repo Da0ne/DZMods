@@ -1,8 +1,8 @@
 class CfgMods
 {
-	class VanillaPlusPlus
+	class VanillaPP
 	{
-	    dir = "VanillaPlusPlus";
+	    dir = "VanillaPP";
 	    picture = "";
 	    action = "";
 	    hideName = 1;
@@ -11,7 +11,7 @@ class CfgMods
 	    credits = "DaOne";
 	    author = "DaOne";
 	    authorID = "0";
-	    version = "0.4";
+	    version = "0.41";
 	    extra = 0;
 	    type = "mod";
 
