@@ -1,8 +1,8 @@
 class AdvancedLoadouts extends ModuleManager
 {
 	//=============Mod Tunables=============
-	protected bool m_StaticLoadouts     = true;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (picks random loadout preset you have created using the admin command /export )
-	protected bool m_RandomizedLoadouts = false;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (picks random item to spawn on player from each catagory in 'LoaOuts\RandomlyGenerated')
+	protected bool m_StaticLoadouts     = true;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select loadout preset you have created using the admin command /export )
+	protected bool m_RandomizedLoadouts = false;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select an item from each catagory in 'LoaOuts\RandomlyGenerated')
 	protected bool m_SpawnArmed		    = true;  //Spawn fresh spawns with a pistol, weapon types can be changed in 'DayZSurvival.c' All the way at the bottom in fucntion 'StartingEquipSetup'
 	//======================================
 
@@ -10,19 +10,28 @@ class AdvancedLoadouts extends ModuleManager
 	ref TStringArray LoadoutCatagories = {"Bags","Gloves","Vests","Tops","Pants","Boots","HeadGear","Face"}; //Add any new catagories here, make sure the name matches everywhere used including file
 	ref map<string,string> PoweredOptics; //Type of optics, type of battery
 
-	ref TStringArray Bags = {};
-	ref TStringArray Gloves = {};
-	ref TStringArray Vests = {};
-	ref TStringArray Tops = {};
-	ref TStringArray Pants = {};
-	ref TStringArray Boots = {};
-	ref TStringArray HeadGear = {};
-	ref TStringArray Face = {};
+	ref array<string> Bags;
+	ref array<string> Gloves;
+	ref array<string> Vests;
+	ref array<string> Tops;
+	ref array<string> Pants;
+	ref array<string> Boots;
+	ref array<string> HeadGear;
+	ref array<string> Face;
 
 	void AdvancedLoadouts( DayZSurvival serverMission )
 	{
 		GetRPCManager().AddRPC( "RPC_GetLoadouts", "GetLoadouts", this, SingeplayerExecutionType.Server );
 		GetRPCManager().AddRPC( "RPC_CheckStaticLoadouts", "CheckStaticLoadouts", this, SingeplayerExecutionType.Server );
+
+		Bags     = new array<string>;
+		Gloves   = new array<string>;
+		Vests    = new array<string>;
+		Tops     = new array<string>;
+		Pants    = new array<string>;
+		Boots    = new array<string>;
+		HeadGear = new array<string>;
+		Face     = new array<string>;
 
 		//Make Defualt LD is none exist
 		array<string> DefualtItems = new array<string>;
@@ -91,46 +100,14 @@ class AdvancedLoadouts extends ModuleManager
 			ref Param1< ref map<string, TStringArray> > map_param;
 			ref map<string, TStringArray> m_LootMap = new map<string, TStringArray>;
 			//Construct map
-			if (Bags.Count() == 0)
-			{
-				Bags.Insert("null");
-				m_LootMap.Insert("Bags",Bags);
-			}else { m_LootMap.Insert("Bags",Bags); }
-			if (Gloves.Count() == 0)
-			{
-				Gloves.Insert("null");
-				m_LootMap.Insert("Gloves",Gloves);
-			}else { m_LootMap.Insert("Gloves",Gloves); }
-			if (Vests.Count() == 0)
-			{
-				Vests.Insert("null");
-				m_LootMap.Insert("Vests",Vests);
-			}else { m_LootMap.Insert("Vests",Vests); }
-			if (Tops.Count() == 0)
-			{
-				Tops.Insert("null");
-				m_LootMap.Insert("Tops",Tops);
-			}else { m_LootMap.Insert("Tops",Tops); }
-			if (Pants.Count() == 0)
-			{
-				Pants.Insert("null");
-				m_LootMap.Insert("Pants",Pants);
-			}else { m_LootMap.Insert("Pants",Pants); }
-			if (Boots.Count() == 0)
-			{
-				Boots.Insert("null");
-				m_LootMap.Insert("Boots",Boots);
-			}else { m_LootMap.Insert("Boots",Boots); }
-			if (HeadGear.Count() == 0)
-			{
-				HeadGear.Insert("null");
-				m_LootMap.Insert("HeadGear",HeadGear);
-			}else { m_LootMap.Insert("HeadGear",HeadGear); }
-			if (Face.Count() == 0)
-			{
-				Face.Insert("null");
-				m_LootMap.Insert("Face",Face);
-			}else { m_LootMap.Insert("Face",Face); }
+			m_LootMap.Insert("Bags",Bags);
+			m_LootMap.Insert("Gloves",Gloves);
+			m_LootMap.Insert("Vests",Vests);
+			m_LootMap.Insert("Tops",Tops);
+			m_LootMap.Insert("Pants",Pants);
+			m_LootMap.Insert("Boots",Boots);
+			m_LootMap.Insert("HeadGear",HeadGear);
+			m_LootMap.Insert("Face",Face);
 
 			map_param = new Param1< ref map<string, TStringArray>>(m_LootMap);
 			GetRPCManager().SendRPC( "RPC_ItemsHandle", "ItemsHandle", map_param, true, sender );
@@ -236,12 +213,6 @@ class AdvancedLoadouts extends ModuleManager
 		return ret;
 	}
 
-	void RemoveDummyPlayer(PlayerBase m_DummyUnit)
-	{
-		m_DummyUnit.SetHealth(0);
-		GetGame().ObjectDelete(m_DummyUnit);
-	}
-
 	void ExportInventoryByClassName(ref array<string> ItemsArray)
 	{
 		PlayerBase m_DummyUnit;
@@ -251,7 +222,6 @@ class AdvancedLoadouts extends ModuleManager
 	    	m_DummyUnit.GetHumanInventory().CreateInInventory( ItemsArray.Get(i) );
 	    }
 	    ExportInventory(m_DummyUnit,"Defualt Loadout");
-	    GetGame().GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(this.RemoveDummyPlayer, 3000, false,m_DummyUnit); 
 	}
 
 	void ExportInventory(PlayerBase player,string PresetName)
@@ -764,66 +734,60 @@ class AdvancedLoadouts extends ModuleManager
 			    ref map<string,map<string,map<string, TStringArray>>> ItemInSlot = new map<string,map<string,map<string, TStringArray>>>;
 				ref map<string,map<string,map<string,map<string, TStringArray>>>> ContainerObject = new map<string,map<string,map<string,map<string, TStringArray>>>>;
 
-				TStringArray stSlots = {"Hands","Shoulder","Melee","HeadGear","Mask","EyeWear","Gloves","Armband","Body","Vest","Back","Legs","Feet","PresetName"};
+				TStringArray stSlots = {"Hands","Shoulder","Melee","HeadGear","Mask","EyeWear","Gloves","Armband","Body","Vest","Back","Legs","Feet"};
 				string CurrentSlot;
 				string LoadOutName;
+				string folderName;
 
 				ref array<string> ItemsArray = new array<string>;
 			    for (int i = 0; i < LoadoutDirectorys.Count(); ++i)
 			    {
+			    	folderName = LoadoutDirectorys.Get(i);
 			    	for (int x = 0; x < stSlots.Count(); ++x)
 				    {
 				    	CurrentSlot = stSlots.Get(x);
-				    	string jsonSavePath = MainDirectoy + "\\" + LoadoutDirectorys.Get(i) + "\\" + CurrentSlot +".json";
-				    	if (CurrentSlot == "PresetName")
-				    	{
-				    		FileHandle currentFile = OpenFile("$profile:Static_Loadouts\\" + LoadoutDirectorys.Get(i) + "\\" + "PresetName.txt", FileMode.READ);
+				    	string jsonSavePath = MainDirectoy + "\\" + folderName + "\\" + CurrentSlot +".json";
+
+				    	if (FileExist(jsonSavePath))
+						{
+							FileHandle currentFile = OpenFile("$profile:Static_Loadouts\\" + folderName + "\\" + "PresetName.txt", FileMode.READ);
 							if (currentFile != 0)
 							{
-								string line_content = "";
-								while ( FGets(currentFile,line_content) > 0 )
-								{
-									LoadOutName = line_content;
-								}
-								CloseFile(currentFile);
-								Print("PresetName: "+LoadOutName);
+								FGets(currentFile,LoadOutName);
 							}
-				    	}
-				    	else
-				    	{
-					    	if (FileExist(jsonSavePath))
+							CloseFile(currentFile);
+
+							Print("FileExist: "+jsonSavePath + " PresetName: "+LoadOutName);
+						    JsonFileLoader<map<string,map<string,map<string,map<string,map<string, TStringArray>>>>>>.JsonLoadFile(jsonSavePath, SavedData);
+
+						   	int Y = 0;
+							string mKey;
+							for (Y = 0; Y < SavedData.Count(); ++Y)
 							{
-								Print("FileExist: "+jsonSavePath);
-							    JsonFileLoader<map<string,map<string,map<string,map<string,map<string, TStringArray>>>>>>.JsonLoadFile(jsonSavePath, SavedData);
-							   	
-							   	int Y = 0;
-								string mKey;
-								for (Y = 0; Y < SavedData.Count(); ++Y)
-								{
-									mKey    = SavedData.GetKey(Y);
-									ContainerObject = SavedData.Get(mKey);
-								}
-								for (Y = 0; Y < ContainerObject.Count(); ++Y)
-								{
-									mKey = ContainerObject.GetKey(Y);
-									ItemInSlot = ContainerObject.Get(mKey);
-								}
-								for (Y = 0; Y < ItemInSlot.Count(); ++Y)
-								{
-									mKey = ItemInSlot.GetKey(Y);
-									ItemInInentory = ItemInSlot.Get(mKey);
-								}
-						        for (int J = 0; J < ItemInInentory.Count(); ++J)
-						        {
-						        	string ClassName = ItemInInentory.GetKey(J);
-						        	ItemsArray.Insert(ClassName);
-						        }
+								mKey    = SavedData.GetKey(Y);
+								ContainerObject = SavedData.Get(mKey);
 							}
-				    	}
+							for (Y = 0; Y < ContainerObject.Count(); ++Y)
+							{
+								mKey = ContainerObject.GetKey(Y);
+								ItemInSlot = ContainerObject.Get(mKey);
+							}
+							for (Y = 0; Y < ItemInSlot.Count(); ++Y)
+							{
+								mKey = ItemInSlot.GetKey(Y);
+								ItemInInentory = ItemInSlot.Get(mKey);
+							}
+					        for (int J = 0; J < ItemInInentory.Count(); ++J)
+					        {
+					        	string ClassName = ItemInInentory.GetKey(J);
+					        	ItemsArray.Insert(ClassName);
+					        }
+						}
 				    }
 				 Param3<string,ref array<string>,bool> send_Params = new Param3<string,ref array<string>,bool>(LoadOutName,ItemsArray,m_StaticLoadouts);
     		     GetRPCManager().SendRPC( "RPC_LoadStaticLoadouts", "LoadStaticLoadouts", send_Params, true, sender );
     		     ItemsArray.Clear();
+    		     ItemsArray = new array<string>;
 			    }
 			}
 	  	}
@@ -858,39 +822,42 @@ class AdvancedLoadouts extends ModuleManager
 					line_content = "";
 					while ( FGets(currentFile,line_content) > 0 )
 					{
-						switch(currentCatagory)
+						if (line_content != "" || line_content != "empty" || line_content != "null")
 						{
-							case "Bags":
-							Bags.Insert(line_content);
-							break;
+							switch(currentCatagory)
+							{
+								case "Bags":
+								Bags.Insert(line_content);
+								break;
 
-							case "Gloves":
-							Gloves.Insert(line_content);
-							break;
+								case "Gloves":
+								Gloves.Insert(line_content);
+								break;
 
-							case "Vests":
-							Vests.Insert(line_content);
-							break;
+								case "Vests":
+								Vests.Insert(line_content);
+								break;
 
-							case "Tops":
-							Tops.Insert(line_content);
-							break;
+								case "Tops":
+								Tops.Insert(line_content);
+								break;
 
-							case "Pants":
-							Pants.Insert(line_content);
-							break;
+								case "Pants":
+								Pants.Insert(line_content);
+								break;
 
-							case "Boots":
-							Boots.Insert(line_content);
-							break;
+								case "Boots":
+								Boots.Insert(line_content);
+								break;
 
-							case "HeadGear":
-							HeadGear.Insert(line_content);
-							break;
+								case "HeadGear":
+								HeadGear.Insert(line_content);
+								break;
 
-							case "Face":
-							Face.Insert(line_content);
-							break;
+								case "Face":
+								Face.Insert(line_content);
+								break;
+							}
 						}
 					}
 					CloseFile(currentFile);
