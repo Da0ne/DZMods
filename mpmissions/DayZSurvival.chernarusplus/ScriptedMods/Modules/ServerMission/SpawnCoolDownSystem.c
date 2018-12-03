@@ -45,12 +45,12 @@ class SpawnCoolDownSystem extends ModuleManager
 			    	string CLName  = CoolDownInfo.GetKey(i);
 			    	float    clTime  = CoolDownInfo.Get(CLName);
 
-			    	if (clTime != 0 && CLName == data.param1)
+			    	if (clTime != 0 && CLName == data.param1 && GUID == StoredGUID)
 			    	{
 			    		hasCooldown = true;
 			    		TimeDuration = clTime;
 			    	}
-			    	else if (clTime <= 0 && CLName == data.param1)
+			    	else if (clTime <= 0 && CLName == data.param1 && GUID == StoredGUID)
 			    	{
 			    		hasCooldown = false;
 			    		TimeDuration = 0;
