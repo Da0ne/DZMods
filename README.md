@@ -23,7 +23,7 @@
 **Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from [HERE](https://steamcommunity.com/sharedfiles/filedetails/?id=1559212036)**
 
 ### Step One:
-1. Download Zip from: [Here](https://github.com/Da0ne/DZMods/archive/master.zip)
+1. Download VanillaPlusPlus Zip from: [Here](https://github.com/Da0ne/DZMods/archive/master.zip)
 2. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
 3. Open the 'mpmissions' which is located inside of your server directory.
 4. Copy 'DayZSurvival.chernarusplus' into this location.
