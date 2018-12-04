@@ -18,8 +18,7 @@
 -
 ## Installation: 
 
-## WARNING: IF YOU ARE JUST A PLAYER, AND NOT A HOST, PLEASE GO TO THE STEAM WORKSHOP TO DOWNLOAD RPCMANAGER AND VANILLAPLUSPLUS.
-[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068)
+## [WARNING: IF YOU ARE JUST A PLAYER, AND NOT A HOST, PLEASE GO TO THE STEAM WORKSHOP TO DOWNLOAD RPCMANAGER AND VANILLAPLUSPLUS.](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068)
 
 **Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from [HERE](https://steamcommunity.com/sharedfiles/filedetails/?id=1559212036)**
 
