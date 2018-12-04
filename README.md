@@ -92,7 +92,7 @@ Client:
 - This feature allows the server owner to place CustomBuildings by minimalizing the amount of code needed to spawn in additional buildings.
 
 ## Chatbased Admin Tools
-- This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg.
+- This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg. This file is located in \DayZSurvival.chernarusplus\ScriptedMods\Admins.txt
 
 **An admin can login by typing the following into DayZ's chat system:**
 ```
