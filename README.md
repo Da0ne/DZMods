@@ -1,113 +1,117 @@
+<img src="https://steamuserimages-a.akamaihd.net/ugc/963104960328902635/7B432D74B8C015585D1E375F51B371B26E64E71F/" align="right" alt="Headerlogo" height="auto" width="400px">
 
 # DayZ Vanilla++ Mod v0.4
 
-**Update: December 1st 2018**
+**Last update: December 1st 2018**
 
-**Version 0.4 is FINALLY HERE! Client SUPPORT! yeeet..Eskidddit...ok enough of that.**
 
-**WORKSHOP SUPPORT FINALLY!** 
 
-**This GitHub post will include Client + Server Files however you won't be able to edit the client side of things...due to it being a signed PBO, thus all players on your server need to subscribe to the mod on steam via this** [Vanilla++ Client Files](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068) 
+## 🚩 Table of Contents
+- [What is Vanilla++](#what-is-vanilla)
+- [Installation](#installation)
+	- [Client](#client)
+	- [Server](#server)
+        - [ViLAYER](#vilayer)
+	    - [Manual](#manual)
+- [Configuration](#configuration)
+- [Features](#features)
+    - [In game Map](#in-game-map)
+	- [Custom Ladout & Spawn Menu](#custom-ladout--spawn-menu)
+	- [Customized loadouts using the AdminTool](#customized-loadouts-using-the-admintool)
+	- [Enable/Disable Stamina](#enabledisable-stamina)
+	- [Spawn Custom Buildings](#spawn-custom-buildings)
+	- [Chatbased Admin Tools](#chatbased-admin-tools)
+	- [Player Score/Kill Activity Tracker](#player-scorekill-activity-tracker)
+	- [Chatbased Kill Messages](#chatbased-kill-messages)
+- [Images](#images)
+- [Changelogs](#changelogs)
+- [Credits](#credits)
 
-**NOTE: PLEASE GO THRU THE SETUP STEPS BEFORE YOU OPEN AN ISSUE!**
+## What is Vanilla++:
 
-### IMPORTANT :
-- For those who own a server provide by [Vilayer.com](https://www.Vilayer.com), can auto install the mod via the `AddonManager` (special thanks goes to the Vilayer team)!
+Vanilla++ is a DayZ workshop add-on which aims to extend the Vanilla experience by implementing features, and tool which help server owners customize the expirence of their server while still allowing for that vanilla DayZ feel.
 
-![https://www.vilayer.com](https://ci5.googleusercontent.com/proxy/yE1RaRsPdehe3Y5lTBg3K2UmKkKYBPUl4HOLneY8hzalp34EayGB0c8qeUxsz4W_vaGETV57DzOYC1huj7bvJmDlyfIodhIE2p07uyLeVuvkyCvCOmKg=s0-d-e1-ft#https://www.vilayer.com/templates/ColoNode/html/img/logo_dark.png)
--
-## Installation: 
+For a full list of features  please see the [Features](#).
 
-## [WARNING: IF YOU ARE JUST A PLAYER, AND NOT A HOST, PLEASE GO TO THE STEAM WORKSHOP TO DOWNLOAD RPCMANAGER AND VANILLAPLUSPLUS.](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068)
+## Installation:
 
-**Very IMPORTANT! This mod now has a dependency on using Jacob_Mango's @RPCFramework mod! Get it from [HERE](https://steamcommunity.com/sharedfiles/filedetails/?id=1559212036)**
+### Client:
 
-### Step One:
-1. Download VanillaPlusPlus Zip from: [Here](https://github.com/Da0ne/DZMods/archive/master.zip)
-2. Go to the server's main directory and create a new directory and name the folder anything you desire, but not NewFolder.
-3. Open the 'mpmissions' which is located inside of your server directory.
-4. Copy 'DayZSurvival.chernarusplus' into this location.
+- If you are a player and want to play on Vanilla++ servers, please subscribe to [our steam workshop release](https://steamcommunity.com/sharedfiles/filedetails/?id=1578593068), as well as,  our dependency [RPCFramework](https://steamcommunity.com/workshop/filedetails/?id=1559212036)
 
-### Step Two:
-1. Move your server config file ```serverDZ.cfg``` file into the folder you named in Step One.
-2. Open the config file, and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus', then save and exit.
-3. Place the folder ```@VanillaPlusPlus``` into your server's main directory.
+- Change your startup following start-up commandlines to include 
+``` -mod=@VanillaPlusPlus;@RPCFramework ```
+(Alternatively: Enable the mods via the DayZLauncher and click ´play´)
 
-### Step Three:
-1. Go to the !workshop folder inside of your DayZ client.
-2. Copy the @RPCFramework and it's key to the proper location of your server. 
-    - Key Location:
-      - server root:/keys 
-    - Add-on location:
-      - server root:/
-3. Change your startup following start-up commandlines to include:
+### Server:
 
-Server:
-```bash
--mod=@VanillaPlusPlus;@RPCFramework -config=FolderFromStepOne\serverDZ.cfg -profiles=FolderFromStepOne -name=myServerName -scrAllowFileWrite
-```
+#### ViLAYER:
 
-Client:
-```
--mod=@VanillaPlusPlus;@RPCFramework
-```
+For those who own a server provide by [Vilayer.com](https://www.Vilayer.com), can auto install the mod via the `AddonManager`.</br>Special thanks goes to the Vilayer team!
 
-**NOTE: Client can just enable mods through DayZ Launcher**
+<img src="https://ci5.googleusercontent.com/proxy/yE1RaRsPdehe3Y5lTBg3K2UmKkKYBPUl4HOLneY8hzalp34EayGB0c8qeUxsz4W_vaGETV57DzOYC1huj7bvJmDlyfIodhIE2p07uyLeVuvkyCvCOmKg=s0-d-e1-ft#https://www.vilayer.com/templates/ColoNode/html/img/logo_dark.png" alt="vilayer logo" width="auto" height="70px">
 
-**NOTE: Make sure you add the keys to the server. Check 'Key' folder.**
+#### Manual:
 
-**NOTE: The -name command will change the name which shows up in global chat for moments where a player joins, leaves, or is killed.**
+- [Download Vanilla++](https://github.com/Da0ne/DZMods/archive/master.zip)
+- Go into the servers root folder and unpack the folders ```@VanillaPlusPlus``` and ```mpmissions``` there.
+- Create a new folder called ```VanillaPlusPlus_files``` and copy your server config into there (usually called```serverDZ.cfg```)
+- Open the copied config file and change 'dayzOffline.chernarusplus' to 'DayZSurvival.chernarusplus'
+- Subscribe to [RPCFramework](https://steamcommunity.com/workshop/filedetails/?id=1559212036) on the Steam workshop.
+- On your DayZ client, go into the ```!workshop``` folder and copy ```@RPCFramework``` to the root of the server (just like in step 2). If the folder is hidden, open the dayz launcher, go to ´mods´, rightclick ´RPCFramework´ and click on ´open folder´
+- Go inside the copied folder and copie its ´keys´ folder into the server root folder.
+- Change your startup following start-up commandlines to include 
+``` -mod=@VanillaPlusPlus;@RPCFramework -config=VanillaPlusPlus_files\serverDZ.cfg -profiles=VanillaPlusPlus_files -name=myServerName -scrAllowFileWrite ```
 
-**NOTE: If you forget -scrAllowFileWrite then many of stuff would not work, eg load-out system**
+## Configuration:
 
----
+- In order to turn on, or off different functionality, check the top of: ```'/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c'```
 
-# Configuration:
-- In order to turn on, or off different functionality, check the top of ``'/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Tunables.c'``
+- In order to change which spawn menu play will interact with, check the top of:
+```'/mpmission/DayZSurvival.chernarusplus/ScriptedMods/Modules/AdvancedLoadouts.c'```
 
-# Features:
+## Features:
 
-## In-game Map:
+#### In-game Map:
 - Just as the header suggests, we created a in-game map for players to use.
 
-![Map Interface](https://steamuserimages-a.akamaihd.net/ugc/963104528643221326/D74C7BB2CA2891C951869C679F3F4D13DE177E69/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C637%3A358&composite-to=*,*%7C637%3A358&background-color=black)
+#### Custom Ladout & Spawn Menu:
+- This feature allows the server to create loadouts for fresh spawns to spawn with. The server owner can also set spawn points around the map.
 
-## Custom Spawn lodaouts with Spawn Menu.
-- This feature allows the server to create loadouts for fresh spawns to spawn with.
-- The server owner can also set spawn points around the map.
+#### Customized loadouts using the AdminTool:
+- This feature allows the server owner to create loadouts for fresh spawns to spawn with by adding your desired items to \ScriptedMods\LoadOuts\RandomlyGenerated OR Enable Static Loadouts via the Tuneables.c.
 
-![SpawnMenu1](https://steamuserimages-a.akamaihd.net/ugc/963104528643225571/1E0C1137F9E62FBD7DC52D8F23E5FA104F733EF3/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C637%3A358&composite-to=*,*%7C637%3A358&background-color=black)
-
-![SpawnMenu2](https://steamuserimages-a.akamaihd.net/ugc/963104528643226368/2133CEF77A50687271E10F26C591B865226EAD53/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C637%3A358&composite-to=*,*%7C637%3A358&background-color=black)
-
-## Ability to make customized loadouts using the AdminTool .
-- This feature allows the server owner to create loadouts for fresh spawns to spawn with. 
-- By adding your desired items to \ScriptedMods\LoadOuts\RandomlyGenerated OR Enable Static Loadouts via the Tuneables.c.
 - Use the /export loadoutname command via the AdminTools to added a preset players can choose to spawn with. (Only used with Static Loadouts)
 
-## Enable/Disable Stamina
-- Add -DisableStamina to your startup commandline to enable, and remove it from your startup commandline to disable.
+#### Enable/Disable Stamina:
+- Add ´-DisableStamina´ to your startup commandline to enable, and remove it from your startup commandline to disable.
 
-## Spawn Custom Buildings
+#### Spawn Custom Buildings:
 - This feature allows the server owner to place CustomBuildings by minimalizing the amount of code needed to spawn in additional buildings.
 
-## Chatbased Admin Tools
+#### Chatbased Admin Tools:
 - This feature allows the server owner to add Steam 64 IDs into a text file, allowing those users to login using the password set inside of the server.cfg. This file is located in \DayZSurvival.chernarusplus\ScriptedMods\Admins.txt
 
-**An admin can login by typing the following into DayZ's chat system:**
-```
-#login mypassword
-```
+- An admin can login by typing the following into DayZ's chat system: ```#login mypassword```
 
-## Player Score/Kill Activity Tracker
+#### Player Score/Kill Activity Tracker:
 - This feature creates two files into the servers profile, and stores detailed kill information and player stats such as total deaths, and kills.
 
-## Chatbased Kill Messages
-- Sends chat messages showing who killed who, and who committed suicide.
-- UI Coming soon...
+#### Chatbased Kill Messages:
+- Sends chat messages showing who killed who, and who committed suicide. (UI Coming soon.)
 
-### USEFUL THINGS:
-- How to generate new loot positions for your custom buildings: https://pastebin.com/FqunXuzc
+## Images
 
-## CREDITS:
+<img src="https://camo.githubusercontent.com/7d5c3d78885238d604afaf40e8f716d828a6430a/68747470733a2f2f737465616d75736572696d616765732d612e616b616d616968642e6e65742f7567632f3936333130343532383634333232313332362f443734433742423243413238393143393531383639433637394633463444313344453137374536392f3f696e746572706f6c6174696f6e3d6c616e637a6f732d6e6f6e65266f75747075742d666f726d61743d6a706567266f75747075742d7175616c6974793d3935266669743d696e7369646525374336333725334133353826636f6d706f736974652d746f3d2a2c2a253743363337253341333538266261636b67726f756e642d636f6c6f723d626c61636b" alt="ingamemap" height="auto" width="400px">
+Ingame Map
+
+<img src="https://camo.githubusercontent.com/5863adbb631a578b2bf329922ebcd25008bb4a3c/68747470733a2f2f737465616d75736572696d616765732d612e616b616d616968642e6e65742f7567632f3936333130343532383634333232353537312f314530433131333746394536324642443744433532443846323345354641313034463733334546332f3f696e746572706f6c6174696f6e3d6c616e637a6f732d6e6f6e65266f75747075742d666f726d61743d6a706567266f75747075742d7175616c6974793d3935266669743d696e7369646525374336333725334133353826636f6d706f736974652d746f3d2a2c2a253743363337253341333538266261636b67726f756e642d636f6c6f723d626c61636b" alt="ingamemap" height="auto" width="400px">
+Custom loadout & Spawn Menu
+
+<img src="https://camo.githubusercontent.com/f3dd43dbec49013bfca34e551292e0a14dcd7cb3/68747470733a2f2f737465616d75736572696d616765732d612e616b616d616968642e6e65742f7567632f3936333130343532383634333232363336382f323133334345463737413530363837323731453130463236433539314238363532323645414435332f3f696e746572706f6c6174696f6e3d6c616e637a6f732d6e6f6e65266f75747075742d666f726d61743d6a706567266f75747075742d7175616c6974793d3935266669743d696e7369646525374336333725334133353826636f6d706f736974652d746f3d2a2c2a253743363337253341333538266261636b67726f756e642d636f6c6f723d626c61636b" alt="ingamemap" height="auto" width="400px">
+Custom loadout & Spawn Menu 2
+
+## Credits:
+
 - @Sen ( @zalexki zalexki ) from DayZModders Discord Server for the KillScore system https://github.com/zalexki
+- @Slluxx for teaching @GravityWolfNotAmused how not to suck at readme.md files.
