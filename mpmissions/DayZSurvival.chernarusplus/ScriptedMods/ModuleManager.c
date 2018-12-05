@@ -1,49 +1,89 @@
-class ModuleManager
+/*
+	The Following class allows you to enable/disable and modifiy mods.
+*/
+class ModTunables extends AdminModuleManager
 {
-	protected DayZSurvival m_MissionServer;
+	//============Mods============
+	protected bool m_AdminTool         = true;   //Set to 'true' to enable admin tools
+	protected bool m_AdvancedLoadouts  = true;	 //DONT SET THIS TO FALSE! v0.4...Does not Support Vanilla Loadouts yet. -DaOne
+	protected bool m_InfectedHordes	   = true;   //Random zombie hordes that spawn on the map (The tunables for this mod can be found in 'InfectedHordes.c')
+	protected bool m_SafeZone		   = true;   //set 'true' to Enable Safe Zone
+	protected bool m_CustomBuildings   = true;  //Custom Placed Buildings, check the very bottom of this file on how to add a building to spawn on your server.
+	//============================
+
+	//==============Misc==========
+	protected bool m_Debugmode 		   = false; //Set true to disable db for faster server loading and for testing purposes
+	protected bool m_ProxyExportMode   = false; //Set to ture to export a new loot positions xml (export can be found in your Storage folder).
+	protected bool m_StaminaStatus     = true;  //set to true to disable Stamina
+	protected bool m_SessionFeed	   = true;  //Set to true to enable Disconnect/Connect Messages
+	//============================
 	
-	void ModuleManager( DayZSurvival m_MissionServer )
-	{
-		this.m_MissionServer = m_MissionServer;
-	}
-	
-	void ~ModuleManager()
-	{
-		m_MissionServer = NULL;
-	}
-	
-	void Init()
-	{
-		
-	}
-	
-	void onUpdate( float timeslice ) 
+	void ModTunables( DayZSurvival ServerMission )
 	{
 		
 	}
 	
-	void onMissionStart()
+	override void Init()
 	{
-		
-	}
-	
-	void onMissionFinish()
-	{
-		
-	}
-	
-	void onMissionLoaded()
-	{
-		
-	}
-	
-	string GetModuleName()
-	{
-		return ClassName();
+		Print("ModTunables:: Init():: Loading Mod Settings...");
 	}
 
-	typename GetModuleType()
+	bool IsActiveMisc(string MiscName)
 	{
-		return GetModuleName().ToType();
+		switch(MiscName)
+		{
+			case "Debugmode":
+			return m_Debugmode;
+			break;
+
+			case "ProxyExportMode":
+			return m_ProxyExportMode;
+			break;
+
+			case "StaminaStatus":
+			return m_StaminaStatus;
+			break;
+
+			case "SessionFeed":
+			return m_SessionFeed;
+			break;
+		}
+		return false;
 	}
+	
+	bool IsActive(string ModName)
+	{
+		switch(ModName)
+		{
+			case "AdminTools":
+			return m_AdminTool;
+			break;
+
+			case "AdvancedLoadouts":
+			return m_AdvancedLoadouts;
+			break;
+
+			case "InfectedHordes":
+			return m_InfectedHordes;
+			break;
+
+			case "SafeZone":
+			return m_SafeZone;
+			break;
+			
+			case "CustomBuildings":
+			return m_CustomBuildings;
+			break;
+		}
+		return false;
+	}
+	
+	/*CustomBuildings getBuildingList()
+	{
+		return {
+			//Add new more SpawnedBuilding here.
+			//new SpawnedBuilding(string buildingName, string location, string orientation),
+		
+		};
+	}*/
 }
