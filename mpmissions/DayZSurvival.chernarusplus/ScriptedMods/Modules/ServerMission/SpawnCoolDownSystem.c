@@ -126,40 +126,26 @@ class SpawnCoolDownSystem extends ModuleManager
 
 	void AddCooldown(string GUID, string Location)
 	{
+		ref map<string,float> CoolDown_Info;
 		if (m_CLMap.Contains(GUID))
 		{
-			ref map<string,float> CoolDown_Info;
-			for (int i = 0; i < m_CLMap.Count(); ++i)
-		    {
-		    	string PID = m_CLMap.GetKey(i);
-		    	ref map<string,float> ClInfoMap = m_CLMap.Get(PID);
-		   		if (PID == GUID) //Player Already in map...add time to already made map
-		   		{
-	   				for (int x = 0; x < ClInfoMap.Count(); ++x)
+			CoolDown_Info = m_CLMap.Get(GUID);
+			if (CoolDown_Info)
+			{
+			    for (int i = 0; i < CoolDown_Info.Count(); ++i)
+			    {
+			    	string LocationName = CoolDown_Info.GetKey(i);
+	   			    int time 	    = CoolDown_Info.Get(LocationName);
+	   			    if (LocationName == Location)
 	   			    {
-	   			    	string LocationName = ClInfoMap.GetKey(x);
-	   			    	int time 			= ClInfoMap.Get(LocationName);
-	   			    	if (LocationName == Location)
-	   			    	{
-	   			    		Print("Error..Location already added!");
-	   			    	}
-	   			    	else
-	   			    	{
-	   			    		ClInfoMap.Insert(Location,GetCoolDownTimer(Location));
-	   			    		m_CLMap.Set(GUID,ClInfoMap); //updated map
-	   			    		Print("Added Coolodown for "+GUID+ " Info: "+Location+ " " +GetCoolDownTimer(Location));
-	   			    	}
+					Print("Error..Location already added!");
+					return;
 	   			    }
-		   		}
-		   		else //add player to map as new member
-		   		{
-		   			CoolDown_Info = new map<string,float>;
-					CoolDown_Info.Insert(Location,GetCoolDownTimer(Location));
-
-					m_CLMap.Insert(GUID,CoolDown_Info);
-					Print("[init done]Added Coolodown for "+GUID+ " Info: "+Location+ " " +GetCoolDownTimer(Location));
-		   		}
-		    }
+			    }
+			    CoolDown_Info.Insert(Location,GetCoolDownTimer(Location));
+	   			m_CLMap.Set(GUID,CoolDown_Info);
+	   			Print("Added Coolodown for "+GUID+ " Info: "+Location+ " " +GetCoolDownTimer(Location));
+			}
 		}
 		else
 		{
@@ -167,7 +153,7 @@ class SpawnCoolDownSystem extends ModuleManager
 			CoolDown_Info.Insert(Location,GetCoolDownTimer(Location));
 
 			m_CLMap.Insert(GUID,CoolDown_Info);
-			Print("[Doing Init]Added Coolodown for "+GUID+ " Info: "+Location+ " " +GetCoolDownTimer(Location));
+			Print("[Init]Added Coolodown for "+GUID+ " Info: "+Location+ " " +GetCoolDownTimer(Location));
 		}
 	}
 
