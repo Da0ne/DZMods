@@ -1,8 +1,9 @@
-#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\ModuleManager.c"
+#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\AdminModuleManager.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Tunables.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdminTool\\AdminTool.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdvancedLoadouts\\AdvancedLoadouts.c"
-#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\CustomBuildings\\BuildingSpawner.c"
+//#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\CustomBuildings\\BuildingSpawner.c"
+//#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\Misc\\BuildingSpawner.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\SafeZone\\SafeZoneFunctions.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\ServerEvents\\InfectedHordes.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\ServerMission\\SpawnPointsManager.c"
@@ -10,9 +11,9 @@
 
 class DayZSurvival : MissionServer
 {
-	private ref set<ref ModuleManager> m_Modules;
+	private ref set<ref AdminModuleManager> m_Modules;
 	ref InfectedHordes m_ZombieEvents;
-	protected float m_LogInTimerLength = 5;     //The timer for players who join the server  (in seconds)
+	protected float m_LogInTimerLength = 1;     //The timer for players who join the server  (in seconds)
 	protected int   m_UseSpawnMenu = GetGame().ServerConfigGetInt("SpawnSelectionMenu");
 	bool m_StaminaStatus = false;
 
@@ -32,7 +33,7 @@ class DayZSurvival : MissionServer
 		GetRPCManager().AddRPC( "RPC_GetSpawnVectors", "GetSpawnVectors", this, SingeplayerExecutionType.Server );
 		//======================================
 
-		m_Modules = new set<ref ModuleManager>;
+		m_Modules = new set<ref AdminModuleManager>;
 		RegisterModules();
 	}
 	
@@ -62,10 +63,10 @@ class DayZSurvival : MissionServer
 			m_Modules.Insert(new SafeZone(this));
 		}
 
-		if (ModTunables.Cast(GetModule(ModTunables)).IsActive("CustomBuildings"))
+		/*if (ModTunables.Cast(GetModule(ModTunables)).IsActive("Misc"))
 		{
-			m_Modules.Insert(new BuildingSpawner(this, CustomBuildings.Cast(ModTunables.Cast(GetModule(ModTunables)).getBuildingList())));
-		}
+			m_Modules.Insert(new BuildingSpawner(this));
+		}*/
 	}
 	
 	void InitModules()
@@ -76,11 +77,11 @@ class DayZSurvival : MissionServer
 		}
 	}
 	
-	ModuleManager GetModule(typename moduleType)
+	AdminModuleManager GetModule(typename moduleType)
 	{
 		for ( int i = 0; i < m_Modules.Count(); ++i)
 		{
-			ModuleManager module = m_Modules.Get(i);
+			AdminModuleManager module = m_Modules.Get(i);
 			if (module.GetModuleType() == moduleType) 
 			{
 				return module;
@@ -407,44 +408,22 @@ class DayZSurvival : MissionServer
 
 	override void StartingEquipSetup(PlayerBase player, bool clothesChosen)
 	{
-		//This Is no longer used.
-		ItemBase itemBs;
+/*
+		player.RemoveAllItems();
+
+		EntityAI item = player.GetInventory().CreateInInventory(topsArray.GetRandomElement());
+		EntityAI item2 = player.GetInventory().CreateInInventory(pantsArray.GetRandomElement());
+		EntityAI item3 = player.GetInventory().CreateInInventory(shoesArray.GetRandomElement());
+*/
 		EntityAI itemEnt;
-
-		itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-		itemBs = ItemBase.Cast(itemEnt);							
-		itemBs.SetQuantity(6);
+		ItemBase itemBs;
 		
-		/*if (GetModule(AdvancedLoadouts))
-		{
-			if (AdvancedLoadouts.Cast(GetModule(AdvancedLoadouts)).CheckTunables("StaticLoadouts"))
-			{
-				bool reqld = AdvancedLoadouts.Cast(GetModule(AdvancedLoadouts)).LoadRandomStaticLD(player);
-			}
-			else if (AdvancedLoadouts.Cast(GetModule(AdvancedLoadouts)).CheckTunables("RandomizedLoadouts"))
-			{
-				AdvancedLoadouts.Cast(GetModule(AdvancedLoadouts)).LoadRndGenLoadout(player);
-			}
-			else
-			{
-				//Vanilla
-				itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-				itemBs = ItemBase.Cast(itemEnt);							
-				itemBs.SetQuantity(6);
-			}
+		itemEnt = player.GetInventory().CreateInInventory("Rag");
+		itemBs = ItemBase.Cast(itemEnt);
+		itemBs.SetQuantity(4);
+		//SetRandomHealth(itemEnt);
 
-			if (AdvancedLoadouts.Cast(GetModule(AdvancedLoadouts)).CheckTunables("SpawnArmed"))
-			{
-			    RandomWeaponOnStartup(player);
-			}
-		}
-		else
-		{
-			//Vanilla
-			itemEnt = player.GetInventory().CreateInInventory( "Rag" );
-			itemBs = ItemBase.Cast(itemEnt);							
-			itemBs.SetQuantity(6);
-		}
-		*/
+		itemEnt = player.GetInventory().CreateInInventory("RoadFlare");
+		itemBs = ItemBase.Cast(itemEnt);
 	}
 }
