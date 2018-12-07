@@ -1,4 +1,4 @@
-class SafeZone extends ModuleManager
+class SafeZone extends VPPModuleManager
 {
 	vector SAFEZONE_LOACTION = "7500 0 7500"; //Map coords (position of the safe zone)
 	float  SAFEZONE_RADIUS   = 500; //In meter

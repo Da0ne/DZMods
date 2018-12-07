@@ -1,7 +1,7 @@
 /*
 	The Following class allows you to enable/disable and modifiy mods.
 */
-class ModTunables extends ModuleManager
+class ModTunables extends VPPModuleManager
 {
 	//============Mods============
 	protected bool m_AdminTool         = true;   //Set to 'true' to enable admin tools

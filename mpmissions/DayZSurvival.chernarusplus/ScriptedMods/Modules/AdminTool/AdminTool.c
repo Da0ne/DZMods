@@ -1,7 +1,7 @@
 //! channel, from, text, color config class
 typedef Param4<int, string, string, string> AdminChatParams;
 
-class AdminTool extends ModuleManager
+class AdminTool extends VPPModuleManager
 {
 	protected ref map<string, string> m_AdminList;
 	protected ref map<string, vector> m_TPLocations;

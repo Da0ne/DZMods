@@ -2,7 +2,7 @@
 
 typedef array<ref SpawnedBuilding> CustomBuildings;
 
-class BuildingSpawner extends ModuleManager
+class BuildingSpawner extends VPPModuleManager
 {
 	ref CustomBuildings customBuildings;
 

@@ -1,4 +1,4 @@
-#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\ModuleManager.c"
+#include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\VPPModuleManager.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Tunables.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdminTool\\AdminTool.c"
 #include "$CurrentDir:\\mpmissions\\DayZSurvival.chernarusplus\\ScriptedMods\\Modules\\AdvancedLoadouts\\AdvancedLoadouts.c"
@@ -10,7 +10,7 @@
 
 class DayZSurvival : MissionServer
 {
-	private ref set<ref ModuleManager> m_Modules;
+	private ref set<ref VPPModuleManager> m_Modules;
 	ref InfectedHordes m_ZombieEvents;
 	protected float m_LogInTimerLength = 5;     //The timer for players who join the server  (in seconds)
 	protected int   m_UseSpawnMenu = GetGame().ServerConfigGetInt("SpawnSelectionMenu");
@@ -32,7 +32,7 @@ class DayZSurvival : MissionServer
 		GetRPCManager().AddRPC( "RPC_GetSpawnVectors", "GetSpawnVectors", this, SingeplayerExecutionType.Server );
 		//======================================
 
-		m_Modules = new set<ref ModuleManager>;
+		m_Modules = new set<ref VPPModuleManager>;
 		RegisterModules();
 	}
 	
@@ -76,11 +76,11 @@ class DayZSurvival : MissionServer
 		}
 	}
 	
-	ModuleManager GetModule(typename moduleType)
+	VPPModuleManager GetModule(typename moduleType)
 	{
 		for ( int i = 0; i < m_Modules.Count(); ++i)
 		{
-			ModuleManager module = m_Modules.Get(i);
+			VPPModuleManager module = m_Modules.Get(i);
 			if (module.GetModuleType() == moduleType) 
 			{
 				return module;

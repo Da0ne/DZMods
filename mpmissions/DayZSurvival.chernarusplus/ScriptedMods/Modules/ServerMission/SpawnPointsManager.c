@@ -1,4 +1,4 @@
-class SpawnPointsManager extends ModuleManager
+class SpawnPointsManager extends VPPModuleManager
 {	
 	float DEFAULT_COOL_DOWN_INTERVAL = 900.0; //20 minutes
 	

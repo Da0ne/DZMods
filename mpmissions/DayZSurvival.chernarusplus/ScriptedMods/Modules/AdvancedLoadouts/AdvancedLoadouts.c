@@ -1,4 +1,4 @@
-class AdvancedLoadouts extends ModuleManager
+class AdvancedLoadouts extends VPPModuleManager
 {
 	//=============Mod Tunables=============
 	protected bool m_StaticLoadouts     = true;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select loadout preset you have created using the admin command /export )

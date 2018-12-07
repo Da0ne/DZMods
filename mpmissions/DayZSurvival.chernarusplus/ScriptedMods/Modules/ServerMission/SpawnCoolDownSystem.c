@@ -1,4 +1,4 @@
-class SpawnCoolDownSystem extends ModuleManager
+class SpawnCoolDownSystem extends VPPModuleManager
 {	
 	ref map<string, ref map<string,float>> m_CLMap = new map<string, ref map<string,float>>; // Map 1: GUID, CL Info || Map 2: Position Name, CL Length
 	void SpawnCoolDownSystem(  DayZSurvival serverMission )
