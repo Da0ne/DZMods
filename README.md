@@ -24,7 +24,6 @@
 	- [Player Score/Kill Activity Tracker](#player-scorekill-activity-tracker)
 	- [Chatbased Kill Messages](#chatbased-kill-messages)
 - [Images](#images)
-- [Changelogs](#changelogs)
 - [Credits](#credits)
 
 ## What is Vanilla++:
