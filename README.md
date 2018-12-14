@@ -2,6 +2,10 @@
 
 # DayZ Vanilla++ Mod v0.4
 
+**Current State:**
+
+**DayZ was recently updated to version 1.0 and has seemingly broke the File I/O functionality. We are currently working to fix this issue, and move forward with our normal development. Updates will be posted here as they happen.**
+
 **Last update: December 1st 2018**
 
 
