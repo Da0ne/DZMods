@@ -359,9 +359,9 @@
 		<cargo preset="mixArmy" />
     </type>
     <type name="NBCPantsGray">
-        <cargo preset="food" />
-        <cargo preset="tools" />
-        <cargo chance="0.10">
+        <cargo preset="foodVillage" />
+        <cargo preset="toolsMedic" />
+        <cargo chance="0.20">
             <item name="Mag_FNX45_15Rnd" chance="0.14" />
             <item name="Ammo_762x54" chance="0.14" />
             <item name="Ammo_762x39" chance="0.14" />
@@ -1759,7 +1759,7 @@
 	<!-- VEHICLES -->
 	<type name="OffroadHatchback">
 		<attachments chance="1.00">
-			<item name="HatchbackWheel" chance="1.00" />
+			<item name="HatchbackWheel" chance="0.60" />
         </attachments>
 		<attachments chance="1.00">
 			<item name="HatchbackWheel" chance="0.60" />
@@ -1771,7 +1771,7 @@
 			<item name="HatchbackWheel" chance="0.40" />
         </attachments>
 		<attachments chance="1.00">
-			<item name="HatchbackWheel" chance="0.40" />
+			<item name="HatchbackWheel" chance="0.20" />
         </attachments>
 		<attachments chance="1.00">
 			<item name="CarRadiator" chance="0.20" />
@@ -1780,10 +1780,10 @@
 			<item name="CarBattery" chance="0.30" />
         </attachments>
 		<attachments chance="1.00">
-			<item name="HeadlightH7" chance="0.10" />
+			<item name="HeadlightH7" chance="0.40" />
         </attachments>
 		<attachments chance="1.00">
-			<item name="HeadlightH7" chance="0.10" />
+			<item name="HeadlightH7" chance="0.40" />
         </attachments>
 		<attachments chance="1.00">
 			<item name="HatchbackDoors_Driver" chance="0.30" />

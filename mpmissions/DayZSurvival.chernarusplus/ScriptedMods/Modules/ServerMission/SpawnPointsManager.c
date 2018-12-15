@@ -221,6 +221,15 @@ class SpawnPointsManager extends VPPModuleManager
 
 	    	m_MapSpawnPoints.Insert(LocationName,posInfo);
 	    }
-	    JsonFileLoader<ref map<string, ref map<string,float>>>.JsonSaveFile( STR_FILE_PATH, m_MapSpawnPoints );
+
+	    ref JsonSerializer m_Serializer = new JsonSerializer;
+	    string JsonData;
+	    m_Serializer.WriteToString( m_MapSpawnPoints, false, JsonData );
+	    FileHandle currentFile = OpenFile(STR_FILE_PATH, FileMode.WRITE);
+		if (currentFile != 0)
+		{
+			FPrint(currentFile,JsonData);
+			CloseFile(currentFile);
+		}
 	}
 }

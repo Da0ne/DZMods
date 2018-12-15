@@ -520,9 +520,6 @@
             <child lootmax="5" lootmin="0" max="0" min="6" type="ZmbM_JoggerSkinny_Blue"/>
             <child lootmax="5" lootmin="0" max="0" min="6" type="ZmbM_JoggerSkinny_Green"/>
             <child lootmax="5" lootmin="0" max="0" min="6" type="ZmbM_JoggerSkinny_Red"/>
-            <child lootmax="5" lootmin="0" max="0" min="6" type="ZmbM_SurvivorDean_Black"/>
-            <child lootmax="5" lootmin="0" max="0" min="6" type="ZmbM_SurvivorDean_Blue"/>
-            <child lootmax="5" lootmin="0" max="0" min="6" type="ZmbM_SurvivorDean_Grey"/>
             <child lootmax="5" lootmin="0" max="0" min="8" type="ZmbM_VillagerOld_Blue"/>
             <child lootmax="5" lootmin="0" max="0" min="8" type="ZmbM_VillagerOld_Green"/>
             <child lootmax="5" lootmin="0" max="0" min="8" type="ZmbM_VillagerOld_White"/>

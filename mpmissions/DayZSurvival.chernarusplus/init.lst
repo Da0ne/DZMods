@@ -1,0 +1,20 @@
+main()
+//e:\Work\DZ-Trunk\publishing\MPMissions\dayz.ChernarusPlus\init.c
+000004:0x00000190:	ncalli	DayZGame.GetWeather()
+000004:0x00000198:	ncalli	Weather.GetOvercast()
+000004:0x000001a0:	call	RandomFloatInclusive(_f0.000000, _f0.800000)
+000004:0x000001b0:	ncalli	WeatherPhenomenon.Set(#return, _f0.000000, _f0.000000)
+000005:0x000001c0:	ncalli	DayZGame.GetWeather()
+000005:0x000001c8:	ncalli	Weather.GetRain()
+000005:0x000001d0:	call	RandomFloatInclusive(_f0.300000, _f0.600000)
+000005:0x000001e0:	ncalli	WeatherPhenomenon.Set(#return, _f0.000000, _f0.000000)
+000006:0x000001f0:	ncalli	DayZGame.GetWeather()
+000006:0x000001f8:	ncalli	Weather.GetFog()
+000006:0x00000200:	call	RandomFloat01()
+000006:0x00000208:	ncalli	WeatherPhenomenon.Set(#return, _f0.000000, _f0.000000)
+000008:0x00000218:	ncall	CreateHive()
+000008:0x00000220:	movec	ce, #return
+000009:0x00000230:	cmpc	ce, null
+000009:0x00000240:	beq	0x000250
+000010:0x00000248:	ncalli	Hive.InitOnline(_s'')
+000010:0x00000250:	rts

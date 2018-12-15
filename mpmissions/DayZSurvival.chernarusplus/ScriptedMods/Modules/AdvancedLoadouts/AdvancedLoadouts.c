@@ -1,8 +1,9 @@
 class AdvancedLoadouts extends VPPModuleManager
 {
+	/*NOTE: m_StaticLoadouts does not function due to errors the devs had made in the 1.0 update! no ETA on fix*/
 	//=============Mod Tunables=============
-	protected bool m_StaticLoadouts     = true;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select loadout preset you have created using the admin command /export )
-	protected bool m_RandomizedLoadouts = false;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select an item from each catagory in 'LoaOuts\RandomlyGenerated')
+	protected bool m_StaticLoadouts     = false;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select loadout preset you have created using the admin command /export )
+	protected bool m_RandomizedLoadouts = true;  //TO USE YOU MUST HAVE --> AdvancedLoadouts mod active! (players will be able to select an item from each catagory in 'LoaOuts\RandomlyGenerated')
 	protected bool m_SpawnArmed		    = true;  //Spawn fresh spawns with a pistol, weapon types can be changed in 'DayZSurvival.c' All the way at the bottom in fucntion 'StartingEquipSetup'
 	//======================================
 
