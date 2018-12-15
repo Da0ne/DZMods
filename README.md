@@ -1,6 +1,7 @@
 <img src="https://steamuserimages-a.akamaihd.net/ugc/963104960328902635/7B432D74B8C015585D1E375F51B371B26E64E71F/" align="right" alt="Headerlogo" height="auto" width="400px">
 
 # DayZ Vanilla++ Mod v0.4
+**DayZ Update 1.0: As DayZ just hit 1.0 there has been many issues with this mod, core functionality that this mod was dependent on had major changes and bugs due to the devs unfortunately i will not be able to provide a hotfix as this mod really need Json serializer functionality to work. Have to wait for devs to get back in office and address the issues with that feature. 2-3 Days Max! Sorry guys.**
 
 **Last update: December 1st 2018**
 
