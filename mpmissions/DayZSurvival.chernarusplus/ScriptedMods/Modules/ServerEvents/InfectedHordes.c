@@ -88,14 +88,17 @@ class InfectedHordes
 				ref ZombieBase Bszmb;
 				Class.CastTo(Bszmb,AIzmb);
 				Bszmb.AttachEventHandle(PossibleLootDrops,PossibleWeaponDrops,dropChance);
-
-				m_SpawnedZombies.Insert(AIzmb);
-
-				if (oSkin == 5)
+				
+				if (Bszmb)
 				{
-					AIzmb.SetObjectMaterial( 0, "DZ\\data\\data\\laser.rvmat" );
-					AIzmb.SetObjectMaterial( 1, "DZ\\data\\data\\laser.rvmat" );
-					AIzmb.SetObjectMaterial( 2, "DZ\\data\\data\\laser.rvmat" );
+					Bszmb.AttachEventHandle(PossibleLootDrops,PossibleWeaponDrops,dropChance);
+					m_SpawnedZombies.Insert(AIzmb);
+					if (oSkin == 5)
+					{
+						AIzmb.SetObjectMaterial( 0, "DZ\\data\\data\\laser.rvmat" );
+						AIzmb.SetObjectMaterial( 1, "DZ\\data\\data\\laser.rvmat" );
+						AIzmb.SetObjectMaterial( 2, "DZ\\data\\data\\laser.rvmat" );
+					}
 				}
 			}
 		}
