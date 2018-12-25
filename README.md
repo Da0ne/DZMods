@@ -5,6 +5,8 @@
 
 **Last update: December 1st 2018**
 
+**Join our Discord server:[Invite Link V++](https://discord.gg/pb27wYh)**
+
 ## 🚩 Table of Contents
 - [What is Vanilla++](#what-is-vanilla)
 - [Installation](#installation)
