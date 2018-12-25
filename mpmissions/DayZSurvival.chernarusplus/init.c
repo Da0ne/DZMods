@@ -18,11 +18,6 @@ void main()
 	
 	weather.GetRain().SetLimits( 0, 0.1 );
 
-	//INIT ECONOMY--------------------------------------
-	Hive ce = CreateHive();
-	if ( ce )
-		ce.InitOffline();
-
 	//DATE RESET AFTER ECONOMY INIT-------------------------
 	int year;
 	int month;
