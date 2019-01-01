@@ -1,4 +1,4 @@
-<img src="https://steamuserimages-a.akamaihd.net/ugc/963104960328902635/7B432D74B8C015585D1E375F51B371B26E64E71F/" align="right" alt="Headerlogo" height="auto" width="400px">
+<img src="https://i.imgur.com/hoU9hex.png" align="right" alt="Headerlogo" height="auto" width="400px">
 
 # DayZ Vanilla++ Mod v0.4
 **DayZ Update 1.0: Fixed issues with mod startup, now functional however "StaticLoadouts/Preset" do not function due to imporper/aka borken core functionality (making folders for data to be housed). So all server owners running this mod, please use "Randomized loadouts" as till we get a fix for this meme. Other broken things include: Custom Player Stats don't get recorded (Kills,deaths) , Can't save spawnpoints from the admin tools, can't export loadouts via the admintools :( **
